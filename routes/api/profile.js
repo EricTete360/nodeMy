@@ -11,6 +11,7 @@ const keys = require('../../config/keys');
 
 // Validation
 const validateProfileInput = require('../../validation/profile');
+const validatePasswordInput = require('../../validation/passChange');
 
 
 // Models
@@ -145,34 +146,39 @@ passport.authenticate('jwt',{session:false}),
 
 
 // User Password Change
-router.post('/password-change',passport.authenticate('jwt', { session: false }),(req,res)=>{
-    const oldPassword = req.body.oldPassword
-    const newPassword = req.body.newPassword
-    const confirmPassword = req.body.confirmPassword
-    User.findOne({ user: req.user.id })
-        .then(userProfile=>{
-            if(userProfile) {
-            const hash = userProfile.password;
-            bcrypt.compare(oldPassword,hash,function(err,res){
-                if (res){
-                    if(newPassword == confirmPassword){
-                        bcrypt.hash(newPassword,12,function(err,hash){
-                            userProfile.password = hash;
-                            userProfile.save()
-                                        .then(user=>{
-                                            res.json(user);
-                                        }).catch(err=>console.log(err));
-                        })
+router.put('/password-change',passport.authenticate('jwt', { session: false }),(req,res)=>{
 
-                    }
-                }
-            })
+    const { errors, isValid } = validatePasswordInput(req.body);
 
-            }
-            
-            
-           
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    const passfields = {}; // to store profile details
+    passfields.user = req.user.id; // to fetch authenticated user details
+
+    const newPassword = req.body.newPassword;
+    const confirmPassword = req.body.confirmPassword;
+    User.findOne({user: req.user.id})
+    .then(user=>{
+        if(!user){
+            return res.status(422).json({error:"Not Authorised"})
+        }
+        bcrypt.hash(newPassword,12).then(hashedpassword=>{
+            // user.password = hashedpassword
+            // user.save().then((saveduser)=>{
+            //     res.json({message:"Password Changed Successfully"})
+            // })
+            User.updateOne(  
+                { user: req.user.id },
+                { $set: {newPassword,password} },
+                { new: true }).then(user=>res.json(user))
+                              .catch(err=>res.json(err));
+
         })
+    }).catch(err=>{
+        console.log(err);
+    })
 
 });
 

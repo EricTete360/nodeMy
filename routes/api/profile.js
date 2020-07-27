@@ -19,7 +19,7 @@ const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 const { use } = require('passport');
 
-router.use(fileUpload());
+
 // Get Profile
 
 router.get('/',passport.authenticate('jwt',{session:false}),(req,res)=>{

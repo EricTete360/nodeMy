@@ -6,7 +6,9 @@ const passport = require('passport');
 
 const users = require('./routes/api/users');
 const profiles = require('./routes/api/profile');
-const fileupload = require('express-fileupload');
+const patients = require('./routes/api/patient');
+const donors = require('./routes/api/donor');
+
 
 // Sendgrid api
 // username apikey
@@ -27,11 +29,7 @@ app.use(function(req,res,next){
 
 app.use(morgan('dev'));
 
-app.use(fileupload(
-        {
-                limits:{ fileSize: 2*1024*1024 }
-        }
-));
+
 // DB Config
 const db = require('./config/keys').mongoURI;
 
@@ -48,6 +46,8 @@ require('./config/passport')(passport);
 // Use Routes
 app.use('/api/users',users);
 app.use('/api/profile',profiles);
+app.use('/api/patient',patients);
+app.use('/api/donor',donors);
 
 
 const port = process.env.PORT || 5000;

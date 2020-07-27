@@ -80,6 +80,8 @@ passport.authenticate('jwt',{session:false}),
              .catch(err => res.json(err));
         } else {
             Profile.findOne({ dateOfBirth:profilefields.dateOfBirth }).then(profile=>{
+                // Change it to mobile number
+                
                 if (profile) {
                     errors.dateOfBirth = 'Profile Data already exists';
                     res.status(400).json(errors);

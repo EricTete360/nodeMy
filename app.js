@@ -3,11 +3,13 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const adpassport = require('passport');
 
 const users = require('./routes/api/users');
 const profiles = require('./routes/api/profile');
 const patients = require('./routes/api/patient');
 const donors = require('./routes/api/donor');
+const admin = require('./routes/api/admin/users');
 
 
 // Sendgrid api
@@ -42,12 +44,17 @@ app.use(passport.initialize());
 
 // Passport Config
 require('./config/passport')(passport);
+// Admin Passport Config
+require('./config/adminPassport')(adpassport);
 
-// Use Routes
+
+// User Routes
 app.use('/api/users',users);
 app.use('/api/profile',profiles);
 app.use('/api/patient',patients);
 app.use('/api/donor',donors);
+// Adminpanel Side
+app.use('/api/admin',admin);
 
 
 const port = process.env.PORT || 5000;

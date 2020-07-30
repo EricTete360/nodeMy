@@ -123,7 +123,7 @@ router.post('/reset-password',(req,res)=>{
                 user.save().then((result)=>{
                     transporter.sendMail({
                         to:user.email,
-                        from:"no-reply@jivandeep.org",
+                        from:"contact@jivandeep.org",
                         subject:"Password Reset",
                         html:`
                         <h3>Your Request For Password Change</h3><br>

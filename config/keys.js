@@ -4,5 +4,6 @@ module.exports = {
     mongoURI:'mongodb://eric:qwerty1995@newmongoproj-shard-00-00-efa10.mongodb.net:27017,newmongoproj-shard-00-01-efa10.mongodb.net:27017,newmongoproj-shard-00-02-efa10.mongodb.net:27017/mongd?ssl=true&replicaSet=newMongoProj-shard-0&authSource=admin&retryWrites=true&w=majority',
     // mongoURI : 'mongodb://localhost/socnet',
     secretOrKey: 'secret',
+    adminsecret:'secret123',
     nodemail:'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',
 };

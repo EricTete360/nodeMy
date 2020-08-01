@@ -6,7 +6,8 @@ const keys = require('../config/keys');
 
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = keys.secretOrKey;
+// opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('JWT');
+opts.secretOrKey = keys.adminsecret;
 
 module.exports = adpassport => {
     adpassport.use(

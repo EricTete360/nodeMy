@@ -13,14 +13,15 @@ const keys = require('../../config/keys');
 const validatePatientDocument = require('../../validation/patientDoc');
 
 
-
+// Middleware
+const userloginrequire = require('../../middleware/userRequireLogin');
 
 // Models
 const { Patient } = require('../../models/Organ');
 
 
 // Patient Document Fetching
-router.get('/',passport.authenticate('jwt',{session:false}),(req,res)=>{
+router.get('/',userloginrequire,(req,res)=>{
     const errors = {};
     Patient.findOne({ user: req.user.id })
            .then(patient=>{
@@ -36,7 +37,7 @@ router.get('/',passport.authenticate('jwt',{session:false}),(req,res)=>{
 
 // Patient Document Upload
 router.post('/patientDocs',
-passport.authenticate('jwt',{session:false}),
+userloginrequire,
 (req,res)=>{
 
     // Validation

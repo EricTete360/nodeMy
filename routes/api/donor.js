@@ -13,7 +13,8 @@ const keys = require('../../config/keys');
 const validateOrganDocument = require('../../validation/organDoc');
 const validateDonorDocument = require('../../validation/donorform');
 
-
+// Middleware
+const userloginrequire = require('../../middleware/userRequireLogin');
 
 // Models
 const { Donor } = require('../../models/Organ');
@@ -22,7 +23,7 @@ const { DonorDocs } = require('../../models/Organ');
 
 
 // Donor Document Fetching
-router.get('/',passport.authenticate('jwt',{session:false}),(req,res)=>{
+router.get('/',userloginrequire,(req,res)=>{
     const errors = {};
     DonorDocs.findOne({ user: req.user.id })
            .then(donordocs=>{
@@ -38,7 +39,7 @@ router.get('/',passport.authenticate('jwt',{session:false}),(req,res)=>{
 
 // Donor Document Upload
 router.post('/donorDocs',
-passport.authenticate('jwt',{session:false}),
+userloginrequire,
 (req,res)=>{
 
     // Validation
@@ -87,7 +88,7 @@ passport.authenticate('jwt',{session:false}),
 
 // Get Donor
 
-router.get('/donordetails',passport.authenticate('jwt',{session:false}),(req,res)=>{
+router.get('/donordetails',userloginrequire,(req,res)=>{
     const errors = {};
     Donor.findOne({ user: req.user.id })
            .then(donor=>{
@@ -104,7 +105,7 @@ router.get('/donordetails',passport.authenticate('jwt',{session:false}),(req,res
 
 // Create Donor Post Operation
 router.post('/donorform',
-passport.authenticate('jwt',{session:false}),
+userloginrequire,
 (req,res)=>{
 
     // Validation

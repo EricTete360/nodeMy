@@ -12,6 +12,8 @@ const keys = require('../../config/keys');
 const validateProfileInput = require('../../validation/profile');
 const validatePasswordInput = require('../../validation/passChange');
 
+// Middleware
+const userloginrequire = require('../../middleware/userRequireLogin');
 
 // Models
 const Profile = require('../../models/Profile');
@@ -21,24 +23,31 @@ const { use } = require('passport');
 
 // Get Profile
 
-router.get('/',passport.authenticate('jwt',{session:false}),(req,res)=>{
+router.get('/',userloginrequire,(req,res)=>{
+    console.log(req.user.id)
     const errors = {};
-    Profile.findOne({ user: req.user.id })
+    Profile.findOne( {user:req.user.id })
+    
            .then(profile=>{
+               console.log(profile);
                if(!profile){
                    errors.noprofile = 'There is no profile,Complete The Profile details from settings';
                    return res.status(404).json(errors);
 
                }
                res.json(profile);
-           }).catch(err => res.status(404).json(err));
+           }).catch(err => {
+            res.status(401).json(err)
+           }
+                    
+                    );
 });
 
 
 
 // Create Profile Post Operation
 router.post('/fillProfile',
-passport.authenticate('jwt',{session:false}),
+userloginrequire,
 (req,res)=>{
 
     // Validation
@@ -96,7 +105,7 @@ passport.authenticate('jwt',{session:false}),
 
 // Update Profile PUT operation
 router.put('/editProfile',
-passport.authenticate('jwt',{session:false}),
+userloginrequire,
 (req,res)=>{
 
     // Validation
@@ -147,7 +156,7 @@ passport.authenticate('jwt',{session:false}),
 
 
 // User Password Change
-router.put('/password-change',passport.authenticate('jwt', { session: false }),(req,res)=>{
+router.put('/password-change',userloginrequire,(req,res)=>{
 
     const { errors, isValid } = validatePasswordInput(req.body);
 

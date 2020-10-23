@@ -7,8 +7,6 @@ module.exports = function validateOrganDocs(data) {
   data.idNumber = !isEmpty(data.idNumber) ? data.idNumber : '';
   data.idProofImage = !isEmpty(data.idProofImage) ? data.idProofImage : '';
   data.medDocument = !isEmpty(data.medDocument) ? data.medDocument : '';
-  data.medDocumentSecond = !isEmpty(data.medDocumentSecond) ? data.medDocumentSecond : '';
-  data.medDocumentThird = !isEmpty(data.medDocumentThird) ? data.medDocumentThird : '';
   
  
   if (Validator.isEmpty(data.idNumber)) {
@@ -22,12 +20,7 @@ module.exports = function validateOrganDocs(data) {
   if (Validator.isEmpty(data.medDocument)) {
     errors.medDocument = 'Document is required';
   }
-  if (Validator.isEmpty(data.medDocumentSecond)) {
-    errors.medDocumentSecond = 'Document is required';
-  }
-  if (Validator.isEmpty(data.medDocumentThird)) {
-    errors.medDocumentThird = 'Document is required';
-  }
+  
   
   return {
     errors,

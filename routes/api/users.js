@@ -14,8 +14,10 @@ const sendgridTransport = require('nodemailer-sendgrid-transport');
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
 
-const User = require('../../models/User');
 
+// Models
+const User = require('../../models/User');
+// Email Setup
 const transporter = nodemailer.createTransport(sendgridTransport({
     auth:{
         api_key:"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",
@@ -209,6 +211,7 @@ router.get(
     }
   );
   
+
   
 module.exports = router;
 

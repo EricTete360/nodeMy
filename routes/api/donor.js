@@ -56,8 +56,8 @@ userloginrequire,
     if(req.body.idNumber) donrdocs.idNumber = req.body.idNumber;
     if(req.body.idProofImage) donrdocs.idProofImage = req.body.idProofImage;
     if(req.body.medDocument) donrdocs.medDocument = req.body.medDocument;
-    if(req.body.medDocumentSecond) donrdocs.medDocumentSecond = req.body.medDocumentSecond;
-    if(req.body.medDocumentThird) donrdocs.medDocumentThird = req.body.medDocumentThird;
+    // if(req.body.medDocumentSecond) donrdocs.medDocumentSecond = req.body.medDocumentSecond;
+    // if(req.body.medDocumentThird) donrdocs.medDocumentThird = req.body.medDocumentThird;
     
     
     

@@ -18,17 +18,10 @@ const patient = new mongoose.Schema({
         required:true
     },
     medDocument:{
-        type:String,
+        type:Array,
         required:true
     },
-    medDocumentSecond:{
-        type:String,
-        // required:true
-    },
-    medDocumentThird:{
-        type:String,
-        // required:true
-    }
+
 });
 
 const donorDocs = new mongoose.Schema({
@@ -47,17 +40,10 @@ const donorDocs = new mongoose.Schema({
         required:true
     },
     medDocument:{
-        type:String,
+        type:Array,
         required:true
     },
-    medDocumentSecond:{
-        type:String,
-        // required:true
-    },
-    medDocumentThird:{
-        type:String,
-        // required:true
-    }
+  
 });
 
 

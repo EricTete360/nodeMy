@@ -17,9 +17,10 @@ const validateDonorDocument = require('../../validation/donorform');
 const userloginrequire = require('../../middleware/userRequireLogin');
 
 // Models
-const { Donor } = require('../../models/Organ');
-const { DonorDocs } = require('../../models/Organ');
-
+// const { Donor } = require('../../models/Organ');
+// const { DonorDocs } = require('../../models/Organ');
+const Donor = require('../../models/Donor')
+const DonorDocs = require('../../models/DonorDocs')
 
 
 // Donor Document Fetching
@@ -38,10 +39,50 @@ router.get('/',userloginrequire,(req,res)=>{
 
 
 // Donor Document Upload
-router.post('/donorDocs',
-userloginrequire,
-(req,res)=>{
+// router.post('/donorDocs',
+// userloginrequire,
+// (req,res)=>{
+    
+//     // Validation
+//     const { errors, isValid } = validateOrganDocument(req.body);
 
+//     if (!isValid) {
+//       return res.status(400).json(errors);
+//     }
+    
+//     const donrdocs = {}; // to store profile details
+//     donrdocs.user = req.user.id; // to fetch authenticated user details
+    
+//     if(req.body.idNumber) donrdocs.idNumber = req.body.idNumber;
+//     if(req.body.idProofImage) donrdocs.idProofImage = req.body.idProofImage;
+//     if(req.body.medDocument) donrdocs.medDocument = req.body.medDocument;
+    
+//     DonorDocs.findOne({ user: req.user.id }).then(donordocs => {
+//         if (donordocs) {
+//             DonorDocs.findOneAndUpdate(
+//                 { user: req.user.id },
+//                 { $set: donrdocs },
+//                 { new: true }
+//             ).then(donordocs => res.json(donordocs))
+//              .catch(err => res.json(err));
+//         } else {
+//             DonorDocs.findOne({ idNumber:donrdocs.idNumber }).then(donordocs=>{
+//                 // Change it to mobile number
+                
+//                 if (donordocs) {
+//                     errors.idNumber = 'Number already exists';
+//                     res.status(400).json(errors);
+//                 }
+//                 new DonorDocs(donordocs).save().then(donordc => res.json(donordc));
+//             });
+//         }
+//     });
+
+
+// });
+
+router.post('/donorDocs',userloginrequire,(req,res)=>{
+ 
     // Validation
     const { errors, isValid } = validateOrganDocument(req.body);
 
@@ -50,41 +91,45 @@ userloginrequire,
     }
   
 
-    const donrdocs = {}; // to store profile details
-    donrdocs.user = req.user.id; // to fetch authenticated user details
+    const donordocs = {}; // to store profile details
+    donordocs.user = req.user.id; // to fetch authenticated user details
     
-    if(req.body.idNumber) donrdocs.idNumber = req.body.idNumber;
-    if(req.body.idProofImage) donrdocs.idProofImage = req.body.idProofImage;
-    if(req.body.medDocument) donrdocs.medDocument = req.body.medDocument;
-    // if(req.body.medDocumentSecond) donrdocs.medDocumentSecond = req.body.medDocumentSecond;
-    // if(req.body.medDocumentThird) donrdocs.medDocumentThird = req.body.medDocumentThird;
+    if(req.body.idNumber) donordocs.idNumber = req.body.idNumber;
+    if(req.body.idProofImage) donordocs.idProofImage = req.body.idProofImage;
+    if(req.body.medDocument) donordocs.medDocument = req.body.medDocument;
+    // if(req.body.medDocumentSecond) donordocs.medDocumentSecond = req.body.medDocumentSecond;
+    // if(req.body.medDocumentThird) donordocs.medDocumentThird = req.body.medDocumentThird;
     
+    // {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"},
+    // "medDocument": [
+    //     {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"},
+    //     {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"}
+    // ]
     
-    
-    DonorDocs.findOne({ user: req.user.id }).then(donordocs => {
-        if (donordocs) {
-            DonorDocs.findOneAndUpdate(
+    DonorDocs.findOne({ user: req.user.id }).then(patient => {
+        if (patient) {
+            Patient.findOneAndUpdate(
                 { user: req.user.id },
-                { $set: donrdocs },
+                { $set: donordocs },
                 { new: true }
-            ).then(donordocs => res.json(donordocs))
+            ).then(patient => res.json(patient))
              .catch(err => res.json(err));
         } else {
-            DonorDocs.findOne({ idNumber:donrdocs.idNumber }).then(donordocs=>{
+            DonorDocs.findOne({ idNumber:donordocs.idNumber }).then(patient=>{
                 // Change it to mobile number
                 
-                if (donordocs) {
+                if (patient) {
                     errors.idNumber = 'Number already exists';
                     res.status(400).json(errors);
                 }
-                new DonorDocs(donordocs).save().then(donordc => res.json(donordc));
+                new DonorDocs(donordocs).save().then(patient => res.json(patient));
             });
         }
     });
 
 
-});
 
+})
 
 // Get Donor
 

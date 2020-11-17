@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const patient = new mongoose.Schema({
+const donordocs = new mongoose.Schema({
     user: {
         //   Db relationship as in foreignkey
         type: Schema.Types.ObjectId,
@@ -25,4 +25,4 @@ const patient = new mongoose.Schema({
 });
 
 
-module.exports = DonorDocs = mongoose.model('patients', patient);
+module.exports = DonorDocs = mongoose.model('donorsdoc', donordocs);

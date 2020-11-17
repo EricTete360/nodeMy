@@ -57,7 +57,11 @@ userloginrequire,
     // if(req.body.medDocumentSecond) patientdocs.medDocumentSecond = req.body.medDocumentSecond;
     // if(req.body.medDocumentThird) patientdocs.medDocumentThird = req.body.medDocumentThird;
     
-    
+    // {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"},
+    // "medDocument": [
+    //     {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"},
+    //     {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"}
+    // ]
     
     Patient.findOne({ user: req.user.id }).then(patient => {
         if (patient) {

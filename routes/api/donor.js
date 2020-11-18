@@ -108,7 +108,7 @@ router.post('/donorDocs',userloginrequire,(req,res)=>{
     
     DonorDocs.findOne({ user: req.user.id }).then(patient => {
         if (patient) {
-            Patient.findOneAndUpdate(
+            DonorDocs.findOneAndUpdate(
                 { user: req.user.id },
                 { $set: donordocs },
                 { new: true }

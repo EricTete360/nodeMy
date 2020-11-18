@@ -17,7 +17,7 @@ const validatePatientDocument = require('../../validation/patientDoc');
 const userloginrequire = require('../../middleware/userRequireLogin');
 
 // Models
-const { Patient } = require('../../models/Organ');
+const  Patient  = require('../../models/Organ');
 
 
 // Patient Document Fetching
@@ -64,13 +64,14 @@ userloginrequire,
     // ]
     
     Patient.findOne({ user: req.user.id }).then(patient => {
+        
         if (patient) {
             Patient.findOneAndUpdate(
                 { user: req.user.id },
                 { $set: patientdocs },
                 { new: true }
             ).then(patient => res.json(patient))
-             .catch(err => res.json(err));
+             .catch(err => console.log(err));
         } else {
             Patient.findOne({ idNumber:patientdocs.idNumber }).then(patient=>{
                 // Change it to mobile number

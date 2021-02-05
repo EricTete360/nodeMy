@@ -6,4 +6,7 @@ module.exports = {
     secretOrKey: 'secret',
     adminsecret:'secret123',
     nodemail:'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',
+    user:'jivandeephealthservices@gmail.com',
+    pass:'Jivandeep123!@#',
+    fast2sms:'WZjORmBa4qvd2DNSs9lpxIrcQuUG65gThCkVEKwz8iY3ALyFofP4HA192UGRwsLnV68izyYEOoWDbJrq',
 };

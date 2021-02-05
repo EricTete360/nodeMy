@@ -81,6 +81,7 @@ router.get('/',userloginrequire,(req,res)=>{
 
 // });
 
+
 router.post('/donorDocs',userloginrequire,(req,res)=>{
  
     // Validation
@@ -94,18 +95,10 @@ router.post('/donorDocs',userloginrequire,(req,res)=>{
     const donordocs = {}; // to store profile details
     donordocs.user = req.user.id; // to fetch authenticated user details
     
-    if(req.body.idNumber) donordocs.idNumber = req.body.idNumber;
-    if(req.body.idProofImage) donordocs.idProofImage = req.body.idProofImage;
-    if(req.body.medDocument) donordocs.medDocument = req.body.medDocument;
-    // if(req.body.medDocumentSecond) donordocs.medDocumentSecond = req.body.medDocumentSecond;
-    // if(req.body.medDocumentThird) donordocs.medDocumentThird = req.body.medDocumentThird;
-    
-    // {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"},
-    // "medDocument": [
-    //     {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"},
-    //     {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"}
-    // ]
-    
+    if(req.body.idNumber) donordocs.idNumber = JSON.stringify(req.body.idNumber);
+    if(req.body.idProofImage) donordocs.idProofImage = JSON.stringify(req.body.idProofImage);
+    if(req.body.medDocument) donordocs.medDocument = JSON.stringify(req.body.medDocument);
+
     DonorDocs.findOne({ user: req.user.id }).then(patient => {
         if (patient) {
             DonorDocs.findOneAndUpdate(
@@ -126,11 +119,50 @@ router.post('/donorDocs',userloginrequire,(req,res)=>{
             });
         }
     });
+});
 
+// {
+//     "idNumber":87485418976789,
+//     "idProofImage":{"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"},    
+//     "medDocument":[{"url":"http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"},{"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"}]
+// }
 
+router.post('/newdonorDocs',userloginrequire,(req,res)=>{
+    const donordocs = {
+        idNumber : req.body.idNumber,
+        idProofImage : req.body.idProofImage,
+        medDocument : req.body.medDocument,
+        user : req.user.id
+    }
+    DonorDocs.findOne({user: req.user.id}).then(obj => {
+        if(obj) {
+            DonorDocs.findOneAndUpdate(
+                { user: req.user.id },
+                { $set: donordocs },
+                { new: true }
+            ).then( obj => { res.json(obj) } ).catch( err => {res.json(err)} );
+        } else {
+            DonorDocs.findOne({ idNumber:donordocs.idNumber }).then(obj=>{
+                // Change it to mobile number
+                
+                if (obj) {
+                    errors.idNumber = 'Number already exists';
+                    res.status(400).json(errors);
+                }
+                new DonorDocs(donordocs).save().then(obj => res.json(obj));
+            });
+        }
+    })
+});
 
-})
-
+  // if(req.body.medDocumentSecond) donordocs.medDocumentSecond = req.body.medDocumentSecond;
+    // if(req.body.medDocumentThird) donordocs.medDocumentThird = req.body.medDocumentThird;
+    
+    // {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"},
+    // "medDocument": [
+    //     {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"},
+    //     {"url": "http://res.cloudinary.com/drvk8qbzb/image/upload/v1604735956/JivandeepImages/bgx5hr4vaxtwurluwusy.png"}
+    // ]
 // Get Donor
 
 router.get('/donordetails',userloginrequire,(req,res)=>{

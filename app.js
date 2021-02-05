@@ -6,10 +6,12 @@ const passport = require('passport');
 const adpassport = require('passport');
 
 const users = require('./routes/api/users');
+const mobotp = require('./routes/api/mobileOTP');
 const profiles = require('./routes/api/profile');
 const patients = require('./routes/api/patient');
 const donors = require('./routes/api/donor');
 const admin = require('./routes/api/admin/users');
+const forms = require('./routes/api/formDetails/qa');
 
 
 // Sendgrid api
@@ -50,11 +52,15 @@ require('./config/adminPassport')(adpassport);
 
 // User Routes
 app.use('/api/users',users);
+app.use('/api/mobile',mobotp);
 app.use('/api/profile',profiles);
 app.use('/api/patient',patients);
 app.use('/api/donor',donors);
 // Adminpanel Side
 app.use('/api/admin',admin);
+// Form Questions Api
+app.use('/api/forms',forms);
+
 
 
 const port = process.env.PORT || 5000;

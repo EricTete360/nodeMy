@@ -118,8 +118,6 @@ userloginrequire,
 
     const profilefields = {}; // to store profile details
     profilefields.user = req.user.id; // to fetch authenticated user details
-    // const prof_image = req.files.profileImage;
-    // prof_image.mv('./public/profilePictures/' + prof_image.name)
     if(req.body.firstname) profilefields.firstname = req.body.firstname;
     if(req.body.lastname) profilefields.lastname = req.body.lastname;
     if(req.body.bloodGroup) profilefields.bloodGroup = req.body.bloodGroup;
@@ -133,7 +131,6 @@ userloginrequire,
     if(req.body.country) profilefields.country = req.body.country;
     if(req.body.professionalStatus) profilefields.professionalStatus = req.body.professionalStatus;
     if(req.body.profileImage) profilefields.profileImage = req.body.profileImage;
-    // if(prof_image) profilefields.prof_image = prof_image;
     
     
     Profile.findOne({ user: req.user.id }).then(profile => {
@@ -145,9 +142,7 @@ userloginrequire,
             ).then(profile => res.json(profile))
              .catch(err => res.json(err));
         } 
-        // else {
-        //     return err=>res.status(400).json(err);
-        // }
+    
     });
 
 
@@ -175,10 +170,7 @@ router.put('/password-change',userloginrequire,(req,res)=>{
             return res.status(422).json({error:"Not Authorised"})
         }
         bcrypt.hash(newPassword,12).then(hashedpassword=>{
-            // user.password = hashedpassword
-            // user.save().then((saveduser)=>{
-            //     res.json({message:"Password Changed Successfully"})
-            // })
+           
             User.updateOne(  
                 { user: req.user.id },
                 { $set: {newPassword,password} },

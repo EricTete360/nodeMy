@@ -15,6 +15,16 @@ const OTP = require('../../models/Otp');
 const validateMobOTP = require('../../validation/mobOTP');
 const validateOTP = require('../../validation/validateOTP');
 
+router.post('/sendsms', async(req,res)=>{
+    const response = await fast2sms.sendMessage({
+        authorization:keys.fast2sms,
+        message:'Your otp is 512',
+        numbers:['7771870291']
+    });
+    res.send(response);
+
+})
+
 router.post('/otp/login',(req,res)=>{
     const { errors, isValid } = validateMobOTP(req.body);
   

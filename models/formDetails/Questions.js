@@ -31,6 +31,14 @@ const question = new mongoose.Schema({
         ],
         default: 'text'
     },
+    validation:{
+        type: String,
+        enum : [
+            'true',
+            'false',
+        ],
+        default: 'false'
+    },
     date: {
         type: Date,
         default: Date.now

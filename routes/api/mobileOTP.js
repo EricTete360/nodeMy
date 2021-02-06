@@ -44,7 +44,7 @@ router.post('/otp/login',(req,res)=>{
                     console.log(otp);
                     var options = {
                         authorization:keys.fast2sms,
-                        message:'Your OTP is'+otp,
+                        message:otp,
                         numbers:[req.body.mobile]
                     }
                     fast2sms.sendMessage(options);

@@ -9,15 +9,24 @@ const adpassport = require('passport');
 const validateRegisterInput = require('../../../validation/register');
 const validateLoginInput = require('../../../validation/login');
 
-const User = require('../../../models/User');
+// Middleware
+const adminloginrequire = require('../../../middleware/adminRequireLogin');
 
-router.get('/userDetails', (req, res) => {
+const User = require('../../../models/User');
+// Models
+const Questions = require('../../../models/formDetails/Questions');
+const Answer = require('../../../models/formDetails/Answers');
+// const User = require('../../../models/User');
+// const { use } = require('passport');
+
+
+router.get('/userDetails',adminloginrequire, (req, res) => {
     User.find()
       .then(user => res.json(user))
       .catch(err => res.status(404).json({ nouserfound: 'No user found' }));
 });
 
-router.get('/userInfo/:id', (req, res) => {
+router.get('/userInfo/:id',adminloginrequire, (req, res) => {
     const id = req.params.id;
     User.findById(id)
       .then(user => res.json(user))
@@ -25,7 +34,7 @@ router.get('/userInfo/:id', (req, res) => {
 });
 
 // Add User 
-router.post('/addUser',(req,res)=>{
+router.post('/addUser',adminloginrequire,(req,res)=>{
     const {errors, isValid} = validateRegisterInput(req.body);
 
     if (!isValid) {
@@ -84,7 +93,7 @@ router.post('/addUser',(req,res)=>{
 
 
 
-router.delete('/userdelete/:id', (req, res) => {
+router.delete('/userdelete/:id',adminloginrequire, (req, res) => {
     const id = req.params.id;
     User.findByIdAndRemove(id)
       .then(user => res.json(user))
@@ -92,7 +101,7 @@ router.delete('/userdelete/:id', (req, res) => {
 });
 
 
-router.put('/userupdate/:id',(req,res)=>{
+router.patch('/userupdate/:id',adminloginrequire,(req,res)=>{
     const id = req.params.id;
     if(!req.body) {
         return res.status(400).send({
@@ -124,6 +133,90 @@ router.put('/userupdate/:id',(req,res)=>{
         });
     });
 }); 
+
+
+// POST REQUEST ADDING QUESTIONS VIA ADMIN PANEL
+router.post('/addQuestions',adminloginrequire,(req,res)=>{
+
+    Questions.findOne({ question : req.body.question }).then(qs=>{
+        if(qs){
+            return res.status(400).json({question:'Question Exists'});
+        }else{
+            const newQS = new Questions({
+                question : req.body.question,
+                options : req.body.options,
+                type:req.body.type,
+                validation:req.body.validation,
+           });
+            newQS.save().then(qs => res.json(qs));
+        }
+    }).catch(err => console.log(err));
+ 
+});
+// Fetching questions for the admin side.
+router.get('/adminquestionLists',adminloginrequire, (req, res) => {
+    Questions.find()
+      .then(ques => res.json(ques))
+      .catch(err => res.status(404).json({ noquesfound: 'No questions found' }));
+  });
+
+
+router.patch('/questionupdate/:id',adminloginrequire,(req,res)=>{
+    const id = req.params.id;
+    if(!req.body) {
+        return res.status(400).send({
+            message: "Please fill all required field"
+        });
+    }
+
+    // Find question and update it with the request body
+    Questions.findByIdAndUpdate(id, {
+        question : req.body.question,
+        options : req.body.options,
+        type:req.body.type,
+        validation:req.body.validation,
+    }, {new: true})
+    .then(ques => {
+        if(!ques) {
+            return res.status(404).send({
+                message: "Question not found with id " + req.params.id
+            });
+        }
+        res.send(ques);
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            return res.status(404).send({
+                message: "Question not found with id " + req.params.id
+            });                
+        }
+        return res.status(500).send({
+            message: "Error updating question with id " + req.params.id
+        });
+    });
+}); 
+
+router.delete('/questiondelete/:id',adminloginrequire, (req, res) => {
+    const id = req.params.id;
+    Questions.findByIdAndRemove(id)
+      .then(ques => res.json(ques))
+      .catch(err => res.status(404).json({ noquesfound: 'No question found with this id' }));
+});
+
+
+
+  // Fetching responses from the users and showing it to admin panel
+router.get('/admin/QA/response', adminloginrequire,(req, res) => {
+    Answer.find()
+      .then(ans => res.json(ans))
+      .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
+});
+
+// Fetching single response from the users and showing it to admin panel
+router.get('/admin/QA/Singleresponse/:id',adminloginrequire, (req, res) => {
+    Answer.findById({id:req.params.id})
+      .then(ans => res.json(ans))
+      .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
+});
 
 
   

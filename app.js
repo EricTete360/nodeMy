@@ -11,6 +11,7 @@ const profiles = require('./routes/api/profile');
 const patients = require('./routes/api/patient');
 const donors = require('./routes/api/donor');
 const admin = require('./routes/api/admin/users');
+const adminView = require('./routes/api/admin/adminView');
 const forms = require('./routes/api/formDetails/qa');
 
 
@@ -58,6 +59,7 @@ app.use('/api/patient',patients);
 app.use('/api/donor',donors);
 // Adminpanel Side
 app.use('/api/admin',admin);
+app.use('/api/admin/view',adminView);
 // Form Questions Api
 app.use('/api/forms',forms);
 

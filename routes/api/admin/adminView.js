@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const crypto = require('crypto');
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../../config/keys');
@@ -10,7 +12,7 @@ const validateRegisterInput = require('../../../validation/register');
 const validateLoginInput = require('../../../validation/login');
 
 // Middleware
-const adminloginrequire = require('../../../middleware/userRequireLogin');
+const adminloginrequire = require('../../../middleware/adminRequireLogin');
 
 const User = require('../../../models/User');
 // Models
@@ -20,7 +22,7 @@ const Answer = require('../../../models/formDetails/Answers');
 // const { use } = require('passport');
 
 
-router.get('/userDetails', (req, res) => {
+router.get('/userDetails',adminloginrequire, (req, res) => {
     User.find()
       .then(user => res.json(user))
       .catch(err => res.status(404).json({ nouserfound: 'No user found' }));

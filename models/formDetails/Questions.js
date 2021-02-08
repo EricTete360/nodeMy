@@ -18,6 +18,7 @@ const question = new mongoose.Schema({
         type: String,
         enum : [
             'text',
+            'textarea',
             'checkbox',
             'file',
             'email',

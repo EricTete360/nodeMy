@@ -10,7 +10,7 @@ const validateRegisterInput = require('../../../validation/register');
 const validateLoginInput = require('../../../validation/login');
 
 // Middleware
-const adminloginrequire = require('../../../middleware/adminRequireLogin');
+const adminloginrequire = require('../../../middleware/userRequireLogin');
 
 const User = require('../../../models/User');
 // Models

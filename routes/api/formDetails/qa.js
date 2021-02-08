@@ -10,6 +10,8 @@ const keys = require('../../../config/keys');
 // Middleware
 const userloginrequire = require('../../../middleware/userRequireLogin');
 
+const Questions = require('../../../models/formDetails/Questions');
+const Answer = require('../../../models/formDetails/Answers');
 
 // for frontend users
 // GET REQUEST OF Questions

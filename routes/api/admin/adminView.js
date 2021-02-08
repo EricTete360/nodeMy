@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
-
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../../config/keys');
+const nodemailer = require('nodemailer');
 const adpassport = require('passport');
 
 // Inout Validation
 const validateRegisterInput = require('../../../validation/register');
-const validateLoginInput = require('../../../validation/login');
 
 // Middleware
 const adminloginrequire = require('../../../middleware/adminRequireLogin');
@@ -21,8 +20,17 @@ const Answer = require('../../../models/formDetails/Answers');
 // const User = require('../../../models/User');
 // const { use } = require('passport');
 
+const transporter = nodemailer.createTransport({
+    host: "smtp.googlemail.com",
+    port:465,
+    secure: true,
+    auth: {
+      user: keys.user,
+      pass: keys.pass
+    }
+  });
 
-router.get('/userDetails',adminloginrequire, (req, res) => {
+router.get('/userDetails', (req, res) => {
     User.find()
       .then(user => res.json(user))
       .catch(err => res.status(404).json({ nouserfound: 'No user found' }));

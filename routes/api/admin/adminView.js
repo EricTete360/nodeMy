@@ -17,7 +17,9 @@ const User = require('../../../models/User');
 // Models
 const Questions = require('../../../models/formDetails/Questions');
 const Answer = require('../../../models/formDetails/Answers');
-// const User = require('../../../models/User');
+const Answers = require('../../../models/formDetails/Answers');
+const { user } = require('../../../config/keys');
+
 // const { use } = require('passport');
 
 const transporter = nodemailer.createTransport({
@@ -36,12 +38,28 @@ router.get('/userDetails', (req, res) => {
       .catch(err => res.status(404).json({ nouserfound: 'No user found' }));
 });
 
+
+// Info with Question and answers
 router.get('/userInfo/:id', (req, res) => {
     const id = req.params.id;
     User.findById(id)
-      .then(user => res.json(user))
+      .then(
+          user => {
+                res.json(user)
+               
+                    
+            }
+        )
       .catch(err => res.status(404).json({ nouserfound: 'No user found with this id' }));
 });
+
+router.get('/userResponse/:id',(req,res)=>{
+    const id = req.params.id;
+    Answers.findOne({user:id}).then(ansres=>{
+        res.json(ansres);
+
+    });
+}); 
 
 // Add User 
 router.post('/addUser',(req,res)=>{
@@ -111,7 +129,7 @@ router.delete('/userdelete/:id', (req, res) => {
 });
 
 
-router.patch('/userupdate/:id',(req,res)=>{
+router.put('/userupdate/:id',(req,res)=>{
     const id = req.params.id;
     if(!req.body) {
         return res.status(400).send({
@@ -171,7 +189,7 @@ router.get('/adminquestionLists', (req, res) => {
   });
 
 
-router.patch('/questionupdate/:id',(req,res)=>{
+router.put('/questionupdate/:id',(req,res)=>{
     const id = req.params.id;
     if(!req.body) {
         return res.status(400).send({
@@ -214,14 +232,14 @@ router.delete('/questiondelete/:id', (req, res) => {
 
 
 
-  // Fetching responses from the users and showing it to admin panel
+// Fetching responses from the users and showing it to admin panel stats
 router.get('/admin/QA/response', (req, res) => {
     Answer.find()
       .then(ans => res.json(ans))
       .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
 });
 
-// Fetching single response from the users and showing it to admin panel
+// Fetching single response from the users and showing it to admin panel stats
 router.get('/admin/QA/Singleresponse/:id', (req, res) => {
     Answer.findById({id:req.params.id})
       .then(ans => res.json(ans))

@@ -55,11 +55,23 @@ router.get('/userInfo/:id', (req, res) => {
 
 router.get('/userResponse/:id',(req,res)=>{
     const id = req.params.id;
-    Answers.findOne({user:id}).then(ansres=>{
-        res.json(ansres);
-
+    Answers.findOne({user:id}).populate("questionID").then(ansres=>{
+        if(!ansres){
+            res.status(200).json({msg:"No Questions Attempted"});
+        }    
+        else{
+            res.json(ansres);
+           
+        }
     });
 }); 
+
+// name:Maqsood Sharma
+// ID:60210d815a10d70004e1091e
+// email:mqsd1995@gmail.com
+// mobile:7771870921
+// password:qwerty1995
+// password2:qwerty1995
 
 // Add User 
 router.post('/addUser',(req,res)=>{
@@ -176,7 +188,8 @@ router.post('/addQuestions',(req,res)=>{
                 type:req.body.type,
                 validation:req.body.validation,
            });
-            newQS.save().then(qs => res.json(qs));
+        //    newQS.options.push(req.body.options);
+            newQS.save().then(qs => res.status(200).json(qs)).catch(err => res.status(500).json(err));
         }
     }).catch(err => console.log(err));
  

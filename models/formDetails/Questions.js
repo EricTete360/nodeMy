@@ -9,10 +9,9 @@ const question = new mongoose.Schema({
         required:true
     },
    
-    options:{
-        type:Array,
-        
-    },
+    options:[
+      Array
+     ],
 
     type:{
         type: String,

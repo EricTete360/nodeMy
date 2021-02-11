@@ -25,13 +25,23 @@ router.get('/questionLists',userloginrequire, (req, res) => {
 
 // Answering Questions API and Recording Response api
 // For frontend users responding request
-router.post('/answer',userloginrequire,(req,res)=>{
-    const response = new Answer({
-        user:req.user.id,
-        questionID:req.body.questionID,
-        answer:req.body.answer,
-    });
-    response.save().then(respa => res.json(respa));  
+router.post('/answer/:id',userloginrequire,(req,res)=>{
+    Questions.findById(req.params.id).then(postAnswer=>{
+        const userAnswer = {
+            user:req.user.id,
+            questionID:req.params.id,
+            answer:req.body.answer,
+        };
+        postAnswer.response.unshift(userAnswer);
+        postAnswer.save().then(resp => res.json(resp)).catch(err=>res.json(err));
+    }).catch(err=>{res.json(err)})
+    // const resp = new Answer({
+    //     user:req.user.id,
+    //     questionID:req.params.id,
+    //     answer:req.body.answer,
+    // });
+    // resp.response.push(resp);
+    // resp.save().then(respa => res.json(respa)).catch(err=>res.json(err));  
 });
 
 

@@ -39,6 +39,20 @@ const question = new mongoose.Schema({
         ],
         default: 'false'
     },
+    response:[
+        {
+            user: {
+                //   Db relationship as in foreignkey
+                type: Schema.Types.ObjectId,
+                ref: 'users',
+            },
+           
+            
+            answer:{
+                type:String,
+            },
+        }
+    ],
     date: {
         type: Date,
         default: Date.now

@@ -53,17 +53,25 @@ router.get('/userInfo/:id', (req, res) => {
       .catch(err => res.status(404).json({ nouserfound: 'No user found with this id' }));
 });
 
-router.get('/userResponse/:id',(req,res)=>{
-    const id = req.params.id;
-    Answers.findOne({user:id}).populate("questionID").then(ansres=>{
-        if(!ansres){
-            res.status(200).json({msg:"No Questions Attempted"});
-        }    
-        else{
-            res.json(ansres);
+router.get('/userResponse',(req,res)=>{
+    Questions.find()
+             .then(rques => { 
+                 var Quest = rques[0]['question'];
+                 var Ans = rques[0]['response'];
+                 res.json(rques);
+
+                })
+             .catch(err=>{res.json(err)});
+    // const id = req.params.id;
+    // Answers.findOne({user:id}).populate("questionID").then(ansres=>{
+    //     if(!ansres){
+    //         res.status(200).json({msg:"No Questions Attempted"});
+    //     }    
+    //     else{
+    //         res.json(ansres);
            
-        }
-    });
+    //     }
+    // }).catch(err => {res.json(err)});
 }); 
 
 // name:Maqsood Sharma

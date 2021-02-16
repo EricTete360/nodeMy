@@ -16,6 +16,8 @@ const adminloginrequire = require('../../../middleware/adminRequireLogin');
 const User = require('../../../models/User');
 // Models
 const Questions = require('../../../models/formDetails/Questions');
+const PatientQuestions = require('../../../models/formDetails/PatientQues');
+const DonorQuestions = require('../../../models/formDetails/DonorQues');
 const Answer = require('../../../models/formDetails/Answers');
 const Answers = require('../../../models/formDetails/Answers');
 const { user } = require('../../../config/keys');
@@ -53,25 +55,19 @@ router.get('/userInfo/:id', (req, res) => {
       .catch(err => res.status(404).json({ nouserfound: 'No user found with this id' }));
 });
 
-router.get('/userResponse',(req,res)=>{
-    Questions.find()
+router.get('/userResponse/:id',(req,res)=>{
+    Questions.findOne({_id:req.params.id}).select("question response")
              .then(rques => { 
-                 var Quest = rques[0]['question'];
-                 var Ans = rques[0]['response'];
-                 res.json(rques);
-
-                })
+                // rques.forEach(el =>{
+                //     // console.log(el.question)
+                //     // el.question
+                //     res.json(el.question);
+                // });
+                // var val = parseJSON(rques);
+                res.json(rques);
+            })
              .catch(err=>{res.json(err)});
-    // const id = req.params.id;
-    // Answers.findOne({user:id}).populate("questionID").then(ansres=>{
-    //     if(!ansres){
-    //         res.status(200).json({msg:"No Questions Attempted"});
-    //     }    
-    //     else{
-    //         res.json(ansres);
-           
-    //     }
-    // }).catch(err => {res.json(err)});
+
 }); 
 
 // name:Maqsood Sharma
@@ -202,6 +198,44 @@ router.post('/addQuestions',(req,res)=>{
     }).catch(err => console.log(err));
  
 });
+
+router.post('/addPatientQuestions',(req,res)=>{
+
+    PatientQuestions.findOne({ question : req.body.question }).then(pqs=>{
+        if(pqs){
+            return res.status(400).json({question:'Question Exists'});
+        }else{
+            const newPQS = new PatientQuestions({
+                question : req.body.question,
+                options : req.body.options,
+                type:req.body.type,
+                validation:req.body.validation,
+           });
+        //    newQS.options.push(req.body.options);
+            newPQS.save().then(pqs => res.status(200).json(pqs)).catch(err => res.status(500).json(err));
+        }
+    }).catch(err => console.log(err));
+ 
+});
+
+router.post('/addDonorQuestions',(req,res)=>{
+
+    DonorQuestions.findOne({ question : req.body.question }).then(dqs=>{
+        if(dqs){
+            return res.status(400).json({question:'Question Exists'});
+        }else{
+            const newDQS = new DonorQuestions({
+                question : req.body.question,
+                options : req.body.options,
+                type:req.body.type,
+                validation:req.body.validation,
+           });
+        //    newQS.options.push(req.body.options);
+            newDQS.save().then(dqs => res.status(200).json(dqs)).catch(err => res.status(500).json(err));
+        }
+    }).catch(err => console.log(err));
+ 
+});
 // Fetching questions for the admin side.
 router.get('/adminquestionLists', (req, res) => {
     Questions.find()
@@ -209,6 +243,19 @@ router.get('/adminquestionLists', (req, res) => {
       .catch(err => res.status(404).json({ noquesfound: 'No questions found' }));
   });
 
+  // Fetching questions for the admin side.
+router.get('/adminpatquestionLists', (req, res) => {
+    PatientQuestions.find()
+      .then(pques => res.json(pques))
+      .catch(err => res.status(404).json({ noquesfound: 'No patients questions found' }));
+  });
+
+  // Fetching questions for the admin side.
+router.get('/admindonquestionLists', (req, res) => {
+    DonorQuestions.find()
+      .then(dques => res.json(dques))
+      .catch(err => res.status(404).json({ noquesfound: 'No Donor questions found' }));
+  });
 
 router.put('/questionupdate/:id',(req,res)=>{
     const id = req.params.id;
@@ -244,6 +291,76 @@ router.put('/questionupdate/:id',(req,res)=>{
     });
 }); 
 
+router.put('/patientquestionupdate/:id',(req,res)=>{
+    const id = req.params.id;
+    if(!req.body) {
+        return res.status(400).send({
+            message: "Please fill all required field"
+        });
+    }
+
+    // Find question and update it with the request body
+    PatientQuestions.findByIdAndUpdate(id, {
+        question : req.body.question,
+        options : req.body.options,
+        type:req.body.type,
+        validation:req.body.validation,
+    }, {new: true})
+    .then(paques => {
+        if(!paques) {
+            return res.status(404).send({
+                message: "Question not found with id " + req.params.id
+            });
+        }
+        res.send(paques);
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            return res.status(404).send({
+                message: "Question not found with id " + req.params.id
+            });                
+        }
+        return res.status(500).send({
+            message: "Error updating question with id " + req.params.id
+        });
+    });
+}); 
+
+
+router.put('/donorquestionupdate/:id',(req,res)=>{
+    const id = req.params.id;
+    if(!req.body) {
+        return res.status(400).send({
+            message: "Please fill all required field"
+        });
+    }
+
+    // Find question and update it with the request body
+    DonorQuestions.findByIdAndUpdate(id, {
+        question : req.body.question,
+        options : req.body.options,
+        type:req.body.type,
+        validation:req.body.validation,
+    }, {new: true})
+    .then(doques => {
+        if(!doques) {
+            return res.status(404).send({
+                message: "Question not found with id " + req.params.id
+            });
+        }
+        res.send(ques);
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            return res.status(404).send({
+                message: "Question not found with id " + req.params.id
+            });                
+        }
+        return res.status(500).send({
+            message: "Error updating question with id " + req.params.id
+        });
+    });
+}); 
+
+
 router.delete('/questiondelete/:id', (req, res) => {
     const id = req.params.id;
     Questions.findByIdAndRemove(id)
@@ -251,21 +368,34 @@ router.delete('/questiondelete/:id', (req, res) => {
       .catch(err => res.status(404).json({ noquesfound: 'No question found with this id' }));
 });
 
-
-
-// Fetching responses from the users and showing it to admin panel stats
-router.get('/admin/QA/response', (req, res) => {
-    Answer.find()
-      .then(ans => res.json(ans))
-      .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
+router.delete('/patientquestiondelete/:id', (req, res) => {
+    const id = req.params.id;
+    PatientQuestions.findByIdAndRemove(id)
+      .then(pques => res.json(pques))
+      .catch(err => res.status(404).json({ nopquesfound: 'No patient question found with this id' }));
 });
 
-// Fetching single response from the users and showing it to admin panel stats
-router.get('/admin/QA/Singleresponse/:id', (req, res) => {
-    Answer.findById({id:req.params.id})
-      .then(ans => res.json(ans))
-      .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
+router.delete('/donorquestiondelete/:id', (req, res) => {
+    const id = req.params.id;
+    DonorQuestions.findByIdAndRemove(id)
+      .then(dques => res.json(dques))
+      .catch(err => res.status(404).json({ noquesfound: 'No donor question found with this id' }));
 });
+
+
+// // Fetching responses from the users and showing it to admin panel stats
+// router.get('/admin/QA/response', (req, res) => {
+//     Answer.find()
+//       .then(ans => res.json(ans))
+//       .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
+// });
+
+// // Fetching single response from the users and showing it to admin panel stats
+// router.get('/admin/QA/Singleresponse/:id', (req, res) => {
+//     Answer.findById({id:req.params.id})
+//       .then(ans => res.json(ans))
+//       .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
+// });
 
 
   

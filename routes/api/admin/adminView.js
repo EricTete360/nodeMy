@@ -55,7 +55,7 @@ router.get('/userInfo/:id', (req, res) => {
       .catch(err => res.status(404).json({ nouserfound: 'No user found with this id' }));
 });
 
-router.get('/userResponse/:id',(req,res)=>{
+router.get('/userResponse',(req,res)=>{
     Questions.findOne({_id:req.params.id}).select("question response")
              .then(rques => { 
                 // rques.forEach(el =>{

@@ -56,7 +56,7 @@ router.get('/userInfo/:id', (req, res) => {
 });
 
 router.get('/userResponse',(req,res)=>{
-    Questions.findOne({_id:req.params.id}).select("question response")
+    Questions.find().select("question response")
              .then(rques => { 
                 // rques.forEach(el =>{
                 //     // console.log(el.question)
@@ -70,6 +70,35 @@ router.get('/userResponse',(req,res)=>{
 
 }); 
 
+router.get('/userPatientResponse',(req,res)=>{
+    PatientQuestions.find().select("question response")
+             .then(rques => { 
+                // rques.forEach(el =>{
+                //     // console.log(el.question)
+                //     // el.question
+                //     res.json(el.question);
+                // });
+                // var val = parseJSON(rques);
+                res.json(rques);
+            })
+             .catch(err=>{res.json(err)});
+
+});
+
+router.get('/userDonorResponse',(req,res)=>{
+    DonorQuestions.find().select("question response")
+             .then(rques => { 
+                // rques.forEach(el =>{
+                //     // console.log(el.question)
+                //     // el.question
+                //     res.json(el.question);
+                // });
+                // var val = parseJSON(rques);
+                res.json(rques);
+            })
+             .catch(err=>{res.json(err)});
+
+});
 // name:Maqsood Sharma
 // ID:60210d815a10d70004e1091e
 // email:mqsd1995@gmail.com

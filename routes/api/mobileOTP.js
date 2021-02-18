@@ -1,11 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const crypto = require('crypto');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
-const fast2sms = require('fast-two-sms')
-
+const axios = require('axios');
 
 // Models
 const User = require('../../models/User');
@@ -15,15 +12,6 @@ const OTP = require('../../models/Otp');
 const validateMobOTP = require('../../validation/mobOTP');
 const validateOTP = require('../../validation/validateOTP');
 
-router.post('/sendsms', async(req,res)=>{
-    const response = await fast2sms.sendMessage({
-        authorization:keys.fast2sms,
-        message:'Your otp is 512',
-        numbers:['7771870291']
-    });
-    res.send(response);
-
-})
 
 router.post('/otp/login',(req,res)=>{
     const { errors, isValid } = validateMobOTP(req.body);
@@ -51,14 +39,16 @@ router.post('/otp/login',(req,res)=>{
             mobOTP.save().then(
                 qs=>
                 {
-                    console.log(otp);
-                    var options = {
-                        authorization:keys.fast2sms,
-                        message:otp,
-                        numbers:[req.body.mobile]
-                    }
-                    fast2sms.sendMessage(options);
-                    res.status(200).send({msg:qs});
+                  
+                    var api = `http://babag.in/app/smsapi/index.php?key=259EDE23FD45E2&entity=1501443720000011716&tempid=999999999999999&routeid=6&type=text&contacts=${mobile}&senderid=LRKSMS&msg=OTP:${otp}`;
+                    return axios.get(api)
+                         .then((res)=>{
+                             console.log(res);
+                            })
+                          .catch((err)=>{
+                            console.log(err);
+                          });
+         
                 }
                 );
         }
@@ -66,6 +56,17 @@ router.post('/otp/login',(req,res)=>{
     
 });
   
+// router.get('/otp/resend',(req,res)=>{
+//     OTP.find().then(otp=>{
+//         if(!otp){
+//             return res.status(400).json({error:"Undefined Request"})
+//         }
+//         else{
+
+//         }
+//     })
+// })
+
 router.post('/otp/verify/:mobile',(req,res)=>{
     const { errors, isValid } = validateOTP(req.body);
     if (!isValid) {

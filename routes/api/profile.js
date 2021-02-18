@@ -24,18 +24,18 @@ const { use } = require('passport');
 // Get Profile
 
 router.get('/',userloginrequire,(req,res)=>{
-    console.log(req.user.id)
+    console.log(req.user.name)
     const errors = {};
     Profile.findOne( {user:req.user.id })
-    
+            res.json(req.user.name)
            .then(profile=>{
-               console.log(profile);
-               if(!profile){
-                   errors.noprofile = 'There is no profile,Complete The Profile details from settings';
-                   return res.status(404).json(errors);
+            //    console.log();
+            //    if(!profile){
+            //        errors.noprofile = 'There is no profile,Complete The Profile details from settings';
+            //        return res.status(404).json(errors);
 
-               }
-               res.json(profile);
+            //    }
+            //    res.json(profile);
            }).catch(err => {
             res.status(401).json(err)
            }

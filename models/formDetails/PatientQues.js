@@ -47,7 +47,7 @@ const patquestion = new mongoose.Schema({
                 ref: 'users',
             },
            
-            
+          
             answer:{
                 type:String,
             },

@@ -46,7 +46,7 @@ const question = new mongoose.Schema({
                 type: Schema.Types.ObjectId,
                 ref: 'users',
             },
-           
+         
             
             answer:{
                 type:String,

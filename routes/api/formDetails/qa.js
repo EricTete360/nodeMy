@@ -42,9 +42,9 @@ router.get('/donorquestionLists',userloginrequire, (req, res) => {
 
 // Answering Questions API and Recording Response api
 // For frontend users responding request
-router.post('/answer',userloginrequire,(req,res)=>{
-    const _id = req.body.id;
-    Questions.findOne({_id}).then(postAnswer=>{
+router.post('/answer/:id',userloginrequire,(req,res)=>{
+    
+    Questions.findOne({ _id:req.params.id }).then(postAnswer=>{
         const userAnswer = {
             user:req.user.id,
             answer:req.body.answer,
@@ -58,10 +58,10 @@ router.post('/answer',userloginrequire,(req,res)=>{
 
 // Answering Questions API and Recording Response api
 // For frontend users responding request
-router.post('/patientanswer',userloginrequire,(req,res)=>{
-    const _id = req.body.id;
+router.post('/patientanswer/:id',userloginrequire,(req,res)=>{
+    // const _id = req.body.id;
 
-    PatientQuestion.findOne({_id}).then(postAnswer=>{
+    PatientQuestion.findOne({_id:req.params.id}).then(postAnswer=>{
         const userAnswer = {
             user:req.user.id,
            
@@ -76,9 +76,10 @@ router.post('/patientanswer',userloginrequire,(req,res)=>{
 
 // Answering Questions API and Recording Response api
 // For frontend users responding request
-router.post('/donoranswer',userloginrequire,(req,res)=>{
-    const _id = req.body.id;
-    DonorQuestion.findOne({_id}).then(postAnswer=>{
+router.post('/donoranswer/:id',userloginrequire,(req,res)=>{
+    // const _id = req.body.id;
+    // console.log(req.body)
+    DonorQuestion.findOne({_id:req.params.id}).then(postAnswer=>{
         const userAnswer = {
             user:req.user.id,
            

@@ -13,7 +13,9 @@ const userloginrequire = require('../../../middleware/userRequireLogin');
 const Questions = require('../../../models/formDetails/Questions');
 const PatientQuestion = require('../../../models/formDetails/PatientQues');
 const DonorQuestion = require('../../../models/formDetails/DonorQues');
-const Answer = require('../../../models/formDetails/Answers');
+const AnswerAddInfo = require('../../../models/formDetails/AnswersOFaddinfo');
+const AnswerPatientDet  = require('../../../models/formDetails/AnswersOFPatientdet');
+const AnswersDonordet = require('../../../models/formDetails/AnswersOFDonordet');
 
 // for frontend users
 // GET REQUEST OF Questions
@@ -91,7 +93,33 @@ router.post('/donoranswer/:id',userloginrequire,(req,res)=>{
     
 });
 
+router.post('/addinfoanswer',userloginrequire,(req,res)=>{
+    const addinfo = new AnswerAddInfo({
+        user:req.user.id,
+        qid:req.body.qid,
+        answer:req.body.answer,
+    });
+    addinfo.save().then(resp=>{resp.json(resp)}).catch(err=>res.json(err));    
+});
 
 
+router.post('/patientdetanswer',userloginrequire,(req,res)=>{
+    const anspatdet = new AnswerPatientDet({
+        user:req.user.id,
+        qid:req.body.qid,
+        answer:req.body.answer,
+    });
+    anspatdet.save().then(resp=>{resp.json(resp)}).catch(err=>res.json(err));    
+});
+
+router.post('/donordetanswer',userloginrequire,(req,res)=>{
+    const ansdondet = new AnswersDonordet({
+        user:req.user.id,
+        qid:req.body.qid,
+        answer:req.body.answer,
+    });
+    ansdondet.save().then(resp=>{resp.json(resp)}).catch(err=>res.json(err));    
+});
 
 module.exports = router;
+

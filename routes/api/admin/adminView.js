@@ -18,9 +18,14 @@ const User = require('../../../models/User');
 const Questions = require('../../../models/formDetails/Questions');
 const PatientQuestions = require('../../../models/formDetails/PatientQues');
 const DonorQuestions = require('../../../models/formDetails/DonorQues');
-const Answer = require('../../../models/formDetails/Answers');
-const Answers = require('../../../models/formDetails/Answers');
+const AnswerAddInfo = require('../../../models/formDetails/AnswersOFaddinfo');
+const AnswerPatientDet  = require('../../../models/formDetails/AnswersOFPatientdet');
+const AnswersDonordet = require('../../../models/formDetails/AnswersOFDonordet');
+
 const { user } = require('../../../config/keys');
+const AnswersOFaddinfo = require('../../../models/formDetails/AnswersOFaddinfo');
+const AnswersOFPatientdet = require('../../../models/formDetails/AnswersOFPatientdet');
+const AnswersOFDonordet = require('../../../models/formDetails/AnswersOFDonordet');
 
 // const { use } = require('passport');
 
@@ -413,11 +418,23 @@ router.delete('/donorquestiondelete/:id', (req, res) => {
 
 
 // // Fetching responses from the users and showing it to admin panel stats
-// router.get('/admin/QA/response', (req, res) => {
-//     Answer.find()
-//       .then(ans => res.json(ans))
-//       .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
-// });
+router.get('/answerAddInfo', (req, res) => {
+    AnswersOFaddinfo.find().populate("user qid")
+      .then(ans => res.json(ans))
+      .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
+});
+
+router.get('/answerPatientInfo', (req, res) => {
+    AnswersOFPatientdet.find().populate("user qid")
+      .then(ans => res.json(ans))
+      .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
+});
+
+router.get('/answerDonorInfo', (req, res) => {
+    AnswersOFDonordet.find().populate("user qid")
+      .then(ans => res.json(ans))
+      .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
+});
 
 // // Fetching single response from the users and showing it to admin panel stats
 // router.get('/admin/QA/Singleresponse/:id', (req, res) => {

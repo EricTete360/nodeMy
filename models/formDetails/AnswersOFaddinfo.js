@@ -2,20 +2,18 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const answers = new mongoose.Schema({
+const answersaddinfo = new mongoose.Schema({
     // user: {
     //     //   Db relationship as in foreignkey
     //     type: Schema.Types.ObjectId,
     //     ref: 'users',
     // },
-    response:[
-        {
             user: {
                 //   Db relationship as in foreignkey
                 type: Schema.Types.ObjectId,
                 ref: 'users',
             },
-            questionID: {
+            qid: {
                 //   Db relationship as in foreignkey
                 type: Schema.Types.ObjectId,
                 ref: 'questions',
@@ -24,11 +22,9 @@ const answers = new mongoose.Schema({
             answer:{
                 type:String,
             },
-        }
-    ],
  
 
 });
 
 
-module.exports = Answer = mongoose.model('answers', answers);
+module.exports = AnswerAddinfo = mongoose.model('answers_addInfo', answersaddinfo);

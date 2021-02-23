@@ -61,7 +61,7 @@ router.post('/answer/:id',userloginrequire,(req,res)=>{
 // Answering Questions API and Recording Response api
 // For frontend users responding request
 router.post('/patientanswer/:id',userloginrequire,(req,res)=>{
-    // const _id = req.body.id;
+  
 
     PatientQuestion.findOne({_id:req.params.id}).then(postAnswer=>{
         const userAnswer = {
@@ -79,8 +79,7 @@ router.post('/patientanswer/:id',userloginrequire,(req,res)=>{
 // Answering Questions API and Recording Response api
 // For frontend users responding request
 router.post('/donoranswer/:id',userloginrequire,(req,res)=>{
-    // const _id = req.body.id;
-    // console.log(req.body)
+    
     DonorQuestion.findOne({_id:req.params.id}).then(postAnswer=>{
         const userAnswer = {
             user:req.user.id,

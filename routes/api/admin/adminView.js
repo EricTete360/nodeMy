@@ -277,6 +277,11 @@ router.get('/adminquestionLists', (req, res) => {
       .catch(err => res.status(404).json({ noquesfound: 'No questions found' }));
   });
 
+router.get('/adminquestionLists/:id', (req, res) => {
+Questions.findById(req.params.id)
+    .then(quesd => res.json(quesd))
+    .catch(err => res.status(404).json({ noquesfound: 'No questions found' }));
+});
   // Fetching questions for the admin side.
 router.get('/adminpatquestionLists', (req, res) => {
     PatientQuestions.find()
@@ -284,6 +289,11 @@ router.get('/adminpatquestionLists', (req, res) => {
       .catch(err => res.status(404).json({ noquesfound: 'No patients questions found' }));
   });
 
+  router.get('/adminpatquestionLists/:id', (req, res) => {
+    PatientQuestions.findById(req.params.id)
+      .then(pquesd => res.json(pquesd))
+      .catch(err => res.status(404).json({ noquesfound: 'No patients questions found' }));
+  });
   // Fetching questions for the admin side.
 router.get('/admindonquestionLists', (req, res) => {
     DonorQuestions.find()
@@ -291,6 +301,11 @@ router.get('/admindonquestionLists', (req, res) => {
       .catch(err => res.status(404).json({ noquesfound: 'No Donor questions found' }));
   });
 
+  router.get('/admindonquestionLists/:id', (req, res) => {
+    DonorQuestions.findById(req.params.id)
+      .then(dquesd => res.json(dquesd))
+      .catch(err => res.status(404).json({ noquesfound: 'No Donor questions found' }));
+  });
 router.put('/questionupdate/:id',(req,res)=>{
     const id = req.params.id;
     if(!req.body) {

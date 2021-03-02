@@ -396,17 +396,18 @@ router.put('/donorquestionupdate/:id',(req,res)=>{
                 message: "Question not found with id " + req.params.id
             });
         }
-        res.send(ques);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Question not found with id " + req.params.id
-            });                
-        }
-        return res.status(500).send({
-            message: "Error updating question with id " + req.params.id
-        });
-    });
+        res.send(doques);
+    })
+    // .catch(err => {
+    //     if(err.kind === 'ObjectId') {
+    //         return res.status(404).send({
+    //             message: "Question not found with id " + req.params.id
+    //         });                
+    //     }
+    //     return res.status(500).send({
+    //         message: "Error updating question with id " + req.params.id
+    //     });
+    // });
 }); 
 
 

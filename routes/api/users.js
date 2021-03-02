@@ -101,7 +101,6 @@ router.post('/register',(req,res)=>{
                                   to:user.email,
                                   from:"contact@jivandeep.org",
                                   subject:"Email Verification Jivandeep Health Tech",
-                                  // text: 'Hello '+ req.body.name +',\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/api\/users\/confirmation\/' + user.email + '\/' + token.token + '\n\nThank You!\n',
                                   html:`
                                   <style>
                                     
@@ -109,7 +108,7 @@ router.post('/register',(req,res)=>{
                                   <div class="container">
                                   <h1>Welcome To Jivandeep</h1><br>
                                   <p> This is verification email please Do not reply to this mail</p><br>
-                                  <p> <a href="${URL}/api/users/confirmation/${user.email}/${token.token}">click here to verify email</a></p>
+                                  <p> <a href="${URL}api/users/confirmation/${user.email}/${token.token}">click here to verify email</a></p>
                                   <div>
                                   `
                               })
@@ -190,10 +189,9 @@ router.post('/resend-link',(req,res)=>{
           to:user.email,
           from:"contact@jivandeep.org",
           subject:"Email Verification Jivandeep Health Tech",
-          // text: 'Hello '+ req.body.name +',\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/api\/users\/confirmation\/' + user.email + '\/' + token.token + '\n\nThank You!\n',
           html:`<h1>Welcome To Jivandeep</h1><br>
           <p> This is verification email please Do not reply to this mail</p><br>
-          <p> <a href="${URL}/api/users/confirmation/${user.email}/${token.token}">click here to verify email</a></p>`
+          <p> <a href="${URL}api/users/confirmation/${user.email}/${token.token}">click here to verify email</a></p>`
       })
       res.json(user)
       

@@ -7,11 +7,11 @@ const keys = require('../../../config/keys');
 const nodemailer = require('nodemailer');
 const adpassport = require('passport');
 
-// Inout Validation
+// In-out Validation
 const validateRegisterInput = require('../../../validation/register');
 
 // Middleware
-const adminloginrequire = require('../../../middleware/adminRequireLogin');
+
 
 const User = require('../../../models/User');
 // Models
@@ -21,6 +21,7 @@ const DonorQuestions = require('../../../models/formDetails/DonorQues');
 const AnswerAddInfo = require('../../../models/formDetails/AnswersOFaddinfo');
 const AnswerPatientDet  = require('../../../models/formDetails/AnswersOFPatientdet');
 const AnswersDonordet = require('../../../models/formDetails/AnswersOFDonordet');
+const Doctor = require('../../../models/doctor/Doctor');
 
 const { user } = require('../../../config/keys');
 const AnswersOFaddinfo = require('../../../models/formDetails/AnswersOFaddinfo');
@@ -289,11 +290,11 @@ router.get('/adminpatquestionLists', (req, res) => {
       .catch(err => res.status(404).json({ noquesfound: 'No patients questions found' }));
   });
 
-  router.get('/adminpatquestionLists/:id', (req, res) => {
-    PatientQuestions.findById(req.params.id)
-      .then(pquesd => res.json(pquesd))
-      .catch(err => res.status(404).json({ noquesfound: 'No patients questions found' }));
-  });
+router.get('/adminpatquestionLists/:id', (req, res) => {
+PatientQuestions.findById(req.params.id)
+    .then(pquesd => res.json(pquesd))
+    .catch(err => res.status(404).json({ noquesfound: 'No patients questions found' }));
+});
   // Fetching questions for the admin side.
 router.get('/admindonquestionLists', (req, res) => {
     DonorQuestions.find()
@@ -398,16 +399,7 @@ router.put('/donorquestionupdate/:id',(req,res)=>{
         }
         res.send(doques);
     })
-    // .catch(err => {
-    //     if(err.kind === 'ObjectId') {
-    //         return res.status(404).send({
-    //             message: "Question not found with id " + req.params.id
-    //         });                
-    //     }
-    //     return res.status(500).send({
-    //         message: "Error updating question with id " + req.params.id
-    //     });
-    // });
+    
 }); 
 
 
@@ -452,15 +444,15 @@ router.get('/answerDonorInfo', (req, res) => {
       .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
 });
 
-// // Fetching single response from the users and showing it to admin panel stats
-// router.get('/admin/QA/Singleresponse/:id', (req, res) => {
-//     Answer.findById({id:req.params.id})
-//       .then(ans => res.json(ans))
-//       .catch(err => res.status(404).json({ noansfound: 'No ans found' }));
-// });
-
-
-  
-  
+// Doctor's list
+router.get('/doctorsList',(req,res)=>{
+    Doctor.find().then(list => res.json(list)).catch(err=>res.status(404).json({ nolist:'No Lists Found' }))
+});
+ 
+router.get('/doctorSingleData/:id', (req, res) => {
+    Doctor.findById(req.params.id)
+      .then(dsd => res.json(dsd))
+      .catch(err => res.status(404).json({ nodet: 'No details found' }));
+  });
 module.exports = router;
 

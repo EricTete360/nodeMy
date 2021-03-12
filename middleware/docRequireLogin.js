@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
     try {
       // Verify token
       let t = token.split(' ')[1];
-      const decoded = jwt.verify(t, keys.adminsecret);
+      const decoded = jwt.verify(t, keys.docsecretOrKey);
       // Add user from payload
       req.user = decoded;
       next();

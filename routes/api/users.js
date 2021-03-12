@@ -22,35 +22,6 @@ const validateLoginInput = require('../../validation/login');
 const User = require('../../models/User');
 const Token = require('../../models/Token');
 
-// Email Setup
-// const transporter = nodemailer.createTransport(sendgridTransport({
-//     auth:{
-//         api_key:"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",
-//     }
-// }));
-
-// const transporter = nodemailer.createTransport({
-//   host: "smtp.mailtrap.io",
-//   port: 2525,
-//   auth: {
-//     user: "6f5fbe637eb509",
-//     pass: "bd2f48721b4333"
-//   }
-// zoho password 8NXQbsiUhPLz
-// });
-
-// const transporter = nodemailer.createTransport({
-//   service:'Zoho',
-//   host: "smtp.zoho.com",
-//   port:587,
-//   secure: false,
-//   ignoreTLS:true,
-//   requireTLS:false,
-//   auth: {
-//     user: "contact@jivandeep.org",
-//     pass: "8NXQbsiUhPLz"
-//   }
-// });
 
 const transporter = nodemailer.createTransport({
   host: "smtp.googlemail.com",

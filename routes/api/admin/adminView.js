@@ -22,6 +22,9 @@ const AnswerAddInfo = require('../../../models/formDetails/AnswersOFaddinfo');
 const AnswerPatientDet  = require('../../../models/formDetails/AnswersOFPatientdet');
 const AnswersDonordet = require('../../../models/formDetails/AnswersOFDonordet');
 const Doctor = require('../../../models/doctor/Doctor');
+const DoctorBasic = require('../../../models/doctor/DoctorBasic');
+const DoctorMed = require('../../../models/doctor/DoctorMed');
+const DoctorOther = require('../../../models/doctor/DoctorOther');
 
 const { user } = require('../../../config/keys');
 const AnswersOFaddinfo = require('../../../models/formDetails/AnswersOFaddinfo');
@@ -454,5 +457,24 @@ router.get('/doctorSingleData/:id', (req, res) => {
       .then(dsd => res.json(dsd))
       .catch(err => res.status(404).json({ nodet: 'No details found' }));
   });
+
+router.get('/doctor/basic/:id',(req,res)=>{
+    DoctorBasic.findOne({user:req.params.id})
+               .then(dbasic=>res.json(dbasic))
+               .catch(err=>res.status(404).json({nodet:"No details Found"}))
+});
+
+router.get('/doctor/medical/:id',(req,res)=>{
+    DoctorMed.findOne({user:req.params.id})
+               .then(dbasic=>res.json(dbasic))
+               .catch(err=>res.status(404).json({nodet:"No details Found"}))
+});
+
+router.get('/doctor/other/:id',(req,res)=>{
+    DoctorOther.findOne({user:req.params.id})
+               .then(dbasic=>res.json(dbasic))
+               .catch(err=>res.status(404).json({nodet:"No details Found"}))
+});
+
 module.exports = router;
 

@@ -12,6 +12,10 @@ const DoctorBasicSchema = new Schema({
     type: String,
     required: true
   },
+  type_of_doctor: {
+    type: String,
+    required: true
+  },
   experience: {
     type: String,
     required: true

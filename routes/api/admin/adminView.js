@@ -456,7 +456,7 @@ router.get('/doctorSingleData/:id', (req, res) => {
     Doctor.findById(req.params.id)
       .then(dsd => res.json(dsd))
       .catch(err => res.status(404).json({ nodet: 'No details found' }));
-  });
+});
 
 router.get('/doctor/basic/:id',(req,res)=>{
     DoctorBasic.findOne({user:req.params.id})

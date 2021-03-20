@@ -77,6 +77,7 @@ docauth,
     dbfields.user = req.user.id; // to fetch authenticated user details
     if(req.body.profile_pic) dbfields.profile_pic = req.body.profile_pic;
     if(req.body.experience) dbfields.experience = req.body.experience;
+    if(req.body.type_of_doctor) dbfields.type_of_doctor = req.body.type_of_doctor;
     if(req.body.opd_fees) dbfields.opd_fees = req.body.opd_fees;
     if(req.body.gender) dbfields.gender = req.body.gender;
     if(req.body.language_proficiency) dbfields.language_proficiency = req.body.language_proficiency;
@@ -97,10 +98,15 @@ docauth,
                 // Change it to mobile number
                 
                 if (profile) {
+                    
+                    new DoctorBasic(dbfields).save().then(profile => res.json(profile));
+
+                }
+                else{
                     errors.current_address = 'Profile Data already exists';
                     res.status(400).json(errors);
                 }
-                new DoctorBasic(dbfields).save().then(profile => res.json(profile));
+                // new DoctorBasic(dbfields).save().then(profile => res.json(profile));
             });
         }
     });
@@ -125,6 +131,7 @@ docauth,
     dbfields.user = req.user.id; // to fetch authenticated user details
     if(req.body.profile_pic) dbfields.profile_pic = req.body.profile_pic;
     if(req.body.experience) dbfields.experience = req.body.experience;
+    if(req.body.type_of_doctor) dbfields.type_of_doctor = req.body.type_of_doctor;
     if(req.body.opd_fees) dbfields.opd_fees = req.body.opd_fees;
     if(req.body.gender) dbfields.gender = req.body.gender;
     if(req.body.language_proficiency) dbfields.language_proficiency = req.body.language_proficiency;
@@ -204,11 +211,12 @@ docauth,
         } else {
             DoctorMed.findOne({ registration_no:dbfields.registration_no }).then(profile=>{
                 // Change it to mobile number
-                
                 if (profile) {
                     errors.registration_no = 'Profile Data already exists';
                     res.status(400).json(errors);
+                    // new DoctorMed(dbfields).save().then(profile => res.json(profile));
                 }
+                
                 new DoctorMed(dbfields).save().then(profile => res.json(profile));
             });
         }
@@ -307,11 +315,11 @@ docauth,
                     res.json(err)
                 });
         } else {
-            DoctorOther.findOne({ current_address:dbfields.current_address }).then(profile=>{
+            DoctorOther.findOne({ current_hospital_address:dbfields.current_hospital_address }).then(profile=>{
                 // Change it to mobile number
                 
                 if (profile) {
-                    errors.current_address = 'Profile Data already exists';
+                    errors.current_hospital_address = 'Profile Data already exists';
                     res.status(400).json(errors);
                 }
                 new DoctorOther(dbfields).save().then(profile => res.json(profile));

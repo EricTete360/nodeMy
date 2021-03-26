@@ -16,6 +16,10 @@ const DoctorBasicSchema = new Schema({
     type: String,
     required: true
   },
+  time_available:{
+    type:String,
+
+  },
   experience: {
     type: String,
     required: true

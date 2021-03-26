@@ -83,6 +83,7 @@ docauth,
     if(req.body.language_proficiency) dbfields.language_proficiency = req.body.language_proficiency;
     if(req.body.current_address) dbfields.current_address = req.body.current_address;
     if(req.body.specialization) dbfields.specialization = req.body.specialization;
+    if(req.body.time_available) dbfields.time_available = req.body.time_available;
     if(req.body.keyword) dbfields.keyword = req.body.keyword;
      
     DoctorBasic.findOne({ user: req.user.id }).then(profile => {
@@ -138,6 +139,7 @@ docauth,
     if(req.body.current_address) dbfields.current_address = req.body.current_address;
     if(req.body.specialization) dbfields.specialization = req.body.specialization;
     if(req.body.keyword) dbfields.keyword = req.body.keyword;
+    if(req.body.time_available) dbfields.time_available = req.body.time_available;
     if(req.body.isVerified) dbfields.isVerified = req.body.isVerified;
      
     DoctorBasic.findOne({ user: req.user.id }).then(profile => {

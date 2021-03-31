@@ -35,6 +35,10 @@ const BookingSchema = new Schema({
       type: String,
       required: true
   },
+  isChecked:{
+    type: Boolean, 
+    default: false
+  },
   creation_date: {
     type: Date,
     default: Date.now

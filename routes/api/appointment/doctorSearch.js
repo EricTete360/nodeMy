@@ -17,8 +17,26 @@ const Booking = require('../../../models/Appointment/Booking');
 router.get('/doctorslist',userloginrequire, (req, res) => {
     DoctorBasic.find().populate("user")
       .then(docs => res.status(200).json(docs))
-      .catch(err => res.status(404).json({ noquesfound: {msg:'No questions found',reason:err} }));
+      .catch(err => res.status(404).json({ nodocfound: {msg:'No doctors found',reason:err} }));
 });
+// 
+router.get('/doctor/:id',userloginrequire, (req, res) => {
+  DoctorBasic.findOne({_id:req.params.id}).populate("user")
+    .then(docs => res.status(200).json(docs))
+    .catch(err => res.status(404).json({ nodocfound: {msg:'No doctor found',reason:err} }));
+});
+
+router.get('/bookinglist',userloginrequire,(req,res)=>{
+  Booking.findOne({user:req.user.id})
+         .then(list => { 
+          if(!list){
+            return res.status(404).json({ msg:"No Booking Found" });
+
+           }
+           res.json(list);
+          })
+         .catch(err => { res.status(401).json(err) })
+})
 
 router.post('/bookappointment',userloginrequire,(req,res)=>{
   const {doc_id,doc_name,patient_name,time_slot,phone,booking_date,hospital_address} = req.body ;

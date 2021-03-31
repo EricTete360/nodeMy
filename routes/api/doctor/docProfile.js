@@ -45,7 +45,7 @@ router.get('/basic',docauth,(req,res)=>{
     DoctorBasic.findOne( {user:req.user.id })
             // res.json(req.user.name)
            .then(docbasic=>{
-               console.log();
+            //    console.log();
                if(!docbasic){
                    errors.noprofile = 'There is no profile,Complete The Profile details from settings';
                    return res.status(404).json(errors);

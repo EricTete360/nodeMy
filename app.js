@@ -17,6 +17,8 @@ const doctor = require('./routes/api/doctor/doctor');
 const doctorprofile = require('./routes/api/doctor/docProfile');
 const doctorappoint = require('./routes/api/appointment/doctorSearch');
 
+const doctorFunction = require('./routes/api/doctor/docFunction');
+
 // Sendgrid api
 // username apikey
 // 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
@@ -67,7 +69,12 @@ app.use('/api/forms',forms);
 // Doctor API
 app.use('/api/doctor',doctor);
 app.use('/api/doctor/details',doctorprofile);
+app.use('/api/doctor/function',doctorFunction);
+
+
+// This is user's side
 app.use('/api/doctor/appointment',doctorappoint);
+
 
 
 

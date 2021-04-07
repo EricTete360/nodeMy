@@ -476,5 +476,93 @@ router.get('/doctor/other/:id',(req,res)=>{
                .catch(err=>res.status(404).json({nodet:"No details Found"}))
 });
 
+router.put('/doctor/basic/update/:id',(req,res)=>{
+    const id = req.params.id;
+    if(!req.body) {
+        return res.status(400).send({
+            message: "Please fill all required field"
+        });
+    }
+
+    // Find question and update it with the request body
+    DoctorBasic.findByIdAndUpdate(id, {
+        profile_pic:req.body.profile_pic,
+        type_of_doctor: req.body.type_of_doctor,
+        time_available:req.body.time_available,
+        experience: req.body.experience,
+        opd_fees: req.body.opd_fees,
+        gender: req.body.gender,
+        language_proficiency: req.body.language_proficiency,
+        current_address:req.body.current_address,
+        specialization:req.body.specialization,
+        keyword:req.body.keyword,
+        isVerified:req.body.isVerified,
+    }, {new: true})
+    .then(docbaseprof => {
+        if(!docbaseprof) {
+            return res.status(404).send({
+                message: "Doctor invalid operation " 
+            });
+        }
+        res.send(docbaseprof);
+    })
+    
+}); 
+
+router.put('/doctor/medical/update/:id',(req,res)=>{
+    const id = req.params.id;
+    if(!req.body) {
+        return res.status(400).send({
+            message: "Please fill all required field"
+        });
+    }
+
+    // Find question and update it with the request body
+    DoctorMed.findByIdAndUpdate(id, {
+        medical_certificate: req.body.medical_certificate,
+        registration_no: req.body.registration_no,
+        id_proof: req.body.id_proof,
+        surgical_specialities: req.body.surgical_specialities,
+        physician_specialities: req.body.physician_specialities,
+        hospital_schedule:req.body.hospital_schedule,
+    }, {new: true})
+    .then(docmedprof => {
+        if(!docmedprof) {
+            return res.status(404).send({
+                message: "Doctor invalid operation " 
+            });
+        }
+        res.send(docmedprof);
+    })
+    
+}); 
+
+router.put('/doctor/other/update/:id',(req,res)=>{
+    const id = req.params.id;
+    if(!req.body) {
+        return res.status(400).send({
+            message: "Please fill all required field"
+        });
+    }
+
+    // Find question and update it with the request body
+    DoctorOther.findByIdAndUpdate(id, {
+        cv: req.body.cv,
+        special_achievement: req.body.special_achievement,
+        current_hospital_address: req.body.current_hospital_address,
+        other_certificates: req.body.other_certificates,
+      
+    }, {new: true})
+    .then(docotherprof => {
+        if(!docotherprof) {
+            return res.status(404).send({
+                message: "Doctor invalid operation " 
+            });
+        }
+        res.send(docotherprof);
+    })
+    
+}); 
+
 module.exports = router;
 

@@ -1,0 +1,14 @@
+1.Admin Basic Update.
+URL:https://jivandeep.herokuapp.com/api/admin/view/doctor/basic/update/:id
+Method:PUT 
+keys: profile_pic,type_of_doctor,time_available,experience,opd_fees,gender,language_proficiency,current_addressspecialization,keyword,isVerified,
+
+2.Admin Medical Update.
+URL:https://jivandeep.herokuapp.com/api/admin/view/doctor/medical/update/:id
+Method:PUT 
+keys: medical_certificate,registration_no,id_proof,surgical_specialities,physician_specialities,hospital_schedule:req.body.hospital_schedule,
+
+3.Admin Other Update.
+URL:https://jivandeep.herokuapp.com/api/admin/view/doctor/other/update/:id 
+Method:PUT 
+keys:cv,special_achievement,current_hospital_address,other_certificates,

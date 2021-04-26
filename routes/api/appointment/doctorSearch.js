@@ -5,13 +5,22 @@ const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../../config/keys');
-
+const Razorpay = require('razorpay')
 
 // Middleware
 const userloginrequire = require('../../../middleware/userRequireLogin');
+let razorpayInstance = new Razorpay({
+  key_id:"rzp_test_Y4OyaGN23UAlCU",
+  key_secret:"kUXicIEIk5MHgvvetM15Vxto",
+});
+
 
 const DoctorBasic = require('../../../models/doctor/DoctorBasic');
 const Booking = require('../../../models/Appointment/Booking');
+const PaymentDetail = require('../../../models/Appointment/PaymentDetail');
+const { nanoid } = require('nanoid');
+
+
 // for frontend users
 // GET REQUEST OF Questions
 router.get('/doctorslist',userloginrequire, (req, res) => {
@@ -62,8 +71,82 @@ router.post('/bookappointment',userloginrequire,(req,res)=>{
 });
 
 
+// Booking payment
+// Reference Link: https://github.com/TheStarkster/Razorpay-Node-React-Sample-Kit
+router.post('/payment-trigger',userloginrequire,(req,res)=>{
+
+  params = {
+    amount: req.body.amount * 100,
+    currency: "INR",
+    receipt: nanoid(),
+    payment_capture: "1"
+  }
+  razorpayInstance.orders.create(params)
+            .then(async (res)=>{
+              const paymentDetail = new PaymentDetail({
+                user : req.user.id,
+                orderId: response.id,
+                receiptId: response.receipt,
+                amount: response.amount,
+                currency: response.currency,
+                createdAt: response.created_at,
+                status: response.status
+              });
+              try{
+                await paymentDetail.save().then(
+                  obj=>{ res.status(200).json(obj) }
+                )
+
+              }
+              catch(e){
+                print(e)
+              }
+            })
+
+});
 
 
+router.post('/verify',userloginrequire,async function(req,res){
+
+  body=req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id;
+	let crypto = require("crypto");
+	let expectedSignature = crypto.createHmac('sha256','kUXicIEIk5MHgvvetM15Vxto')
+							.update(body.toString())
+							.digest('hex');
+
+	// Compare the signatures
+	if(expectedSignature === req.body.razorpay_signature) {
+		// if same, then find the previosuly stored record using orderId,
+		// and update paymentId and signature, and set status to paid.
+		await PaymentDetail.findOneAndUpdate(
+			{ orderId: req.body.razorpay_order_id },
+			{
+				paymentId: req.body.razorpay_payment_id,
+				signature: req.body.razorpay_signature,
+				status: "paid"
+			},
+			{ new: true },
+			function(err, doc) {
+				// Throw er if failed to save
+				if(err){
+					throw err
+				}
+				// Render payment success page, if saved succeffully
+				// res.render('pages/payment/success', {
+				// 	title: "Payment verification successful",
+				// 	paymentDetail: doc
+				// })
+        res.status(200).json({'msg':"Payment Verification Successful"})
+			}
+		);
+	} else {
+    res.status(400).json({'msg':"Payment Verification Failed"})
+
+		// res.render('pages/payment/fail', {
+		// 	title: "Payment verification failed",
+		// })
+	}
+});
 
 
 module.exports = router;

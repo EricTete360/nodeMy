@@ -5,7 +5,7 @@ const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../../config/keys');
-const Razorpay = require('razorpay')
+const Razorpay = require('razorpay');
 
 // Middleware
 const userloginrequire = require('../../../middleware/userRequireLogin');
@@ -19,6 +19,7 @@ const DoctorBasic = require('../../../models/doctor/DoctorBasic');
 const Booking = require('../../../models/Appointment/Booking');
 const PaymentDetail = require('../../../models/Appointment/PaymentDetail');
 const { nanoid } = require('nanoid');
+const { json } = require('body-parser');
 
 
 // for frontend users
@@ -44,8 +45,8 @@ router.get('/bookinglist',userloginrequire,(req,res)=>{
            }
            res.json(list);
           })
-         .catch(err => { res.status(401).json(err) })
-})
+         .catch(err => { res.status(401).json(err); });
+});
 
 router.post('/bookappointment',userloginrequire,(req,res)=>{
   const {doc_id,doc_name,patient_name,time_slot,phone,booking_date,hospital_address} = req.body ;
@@ -63,45 +64,72 @@ router.post('/bookappointment',userloginrequire,(req,res)=>{
     phone : req.body.phone,
     hospital_address : req.body.hospital_address,
     booking_date : req.body.booking_date,
-  })
+  });
   newBooking.save()
-            .then(book=>{res.status(200).json(book)})
-            .catch(err=>{ res.status(403).json(err)})
+            .then(book=>{res.status(200).json(book);})
+            .catch(err=>{ res.status(403).json(err);});
 
 });
 
 
 // Booking payment
 // Reference Link: https://github.com/TheStarkster/Razorpay-Node-React-Sample-Kit
-router.post('/payment-trigger',userloginrequire,(req,res)=>{
+router.post('/payment-trigger',userloginrequire,async (req,res)=>{
 
   params = {
-    amount: req.body.amount * 100,
+    amount: req.body.amount ,
     currency: "INR",
     receipt: nanoid(),
     payment_capture: "1"
-  }
-  razorpayInstance.orders.create(params)
-            .then(async (res)=>{
-              const paymentDetail = new PaymentDetail({
-                user : req.user.id,
-                orderId: response.id,
-                receiptId: response.receipt,
-                amount: response.amount,
-                currency: response.currency,
-                createdAt: response.created_at,
-                status: response.status
-              });
-              try{
-                await paymentDetail.save().then(
-                  obj=>{ res.status(200).json(obj) }
-                )
+  };
 
-              }
-              catch(e){
-                print(e)
-              }
-            })
+  try {
+    const response = await razorpayInstance.orders.create(params);
+    console.log(response);
+    const paydetail = new PaymentDetail({
+                    user : req.user.id,
+                    orderId: response.id,
+                    receiptId: response.receipt,
+                    amount: response.amount,
+                    currency: response.currency,
+                    createdAt: response.created_at,
+                    status: response.status
+                  });
+                  paydetail.save().then((obj)=>{
+                    res.status(200).json({
+                      obj
+                    });
+                  })
+    // res.status(200).json({
+    //   response
+    // });
+  } catch (error) {
+    console.log(error);
+  }
+
+
+  // razorpayInstance.orders.create(params)
+  //           .then((res)=>{
+  //             const paymentDetail = new PaymentDetail({
+  //               user : req.user.id,
+  //               orderId: res.id,
+  //               receiptId: res.receipt,
+  //               amount: res.amount,
+  //               currency: res.currency,
+  //               createdAt: res.created_at,
+  //               status: res.status
+  //             });
+  //             paymentDetail.save().then(
+  //               (obj)=>{
+
+  //                 // break;
+  //                 // console.log(obj);
+  //                 // return obj;
+                  
+  //               }
+  //             );
+   
+  //           });
 
 });
 
@@ -129,18 +157,18 @@ router.post('/verify',userloginrequire,async function(req,res){
 			function(err, doc) {
 				// Throw er if failed to save
 				if(err){
-					throw err
+					throw err;
 				}
 				// Render payment success page, if saved succeffully
 				// res.render('pages/payment/success', {
 				// 	title: "Payment verification successful",
 				// 	paymentDetail: doc
 				// })
-        res.status(200).json({'msg':"Payment Verification Successful"})
+        res.status(200).json({'msg':"Payment Verification Successful"});
 			}
 		);
 	} else {
-    res.status(400).json({'msg':"Payment Verification Failed"})
+    res.status(400).json({'msg':"Payment Verification Failed"});
 
 		// res.render('pages/payment/fail', {
 		// 	title: "Payment verification failed",

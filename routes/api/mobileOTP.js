@@ -56,16 +56,6 @@ router.post('/otp/login',(req,res)=>{
     
 });
   
-// router.get('/otp/resend',(req,res)=>{
-//     OTP.find().then(otp=>{
-//         if(!otp){
-//             return res.status(400).json({error:"Undefined Request"})
-//         }
-//         else{
-
-//         }
-//     })
-// })
 
 router.post('/otp/verify/:mobile',(req,res)=>{
     const { errors, isValid } = validateOTP(req.body);

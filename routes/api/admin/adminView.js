@@ -499,6 +499,7 @@ router.put('/doctor/basic/update/:id',(req,res)=>{
         isVerified:req.body.isVerified,
     }, {new: true})
     .then(docbaseprof => {
+        console.log(docbaseprof);
         if(!docbaseprof) {
             return res.status(404).send({
                 message: "Doctor invalid operation " 

@@ -103,11 +103,11 @@ docauth,
                     new DoctorBasic(dbfields).save().then(profile => res.json(profile));
 
                 }
-                else{
-                    errors.current_address = 'Profile Data already exists';
-                    res.status(400).json(errors);
-                }
-                // new DoctorBasic(dbfields).save().then(profile => res.json(profile));
+                // else{
+                //     errors.current_address = 'Profile Data already exists';
+                //     res.status(400).json(errors);
+                // }
+                new DoctorBasic(dbfields).save().then(profile => res.json(profile));
             });
         }
     });

@@ -4,7 +4,6 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const adpassport = require('passport');
-
 const users = require('./routes/api/users');
 const mobotp = require('./routes/api/mobileOTP');
 const profiles = require('./routes/api/profile');
@@ -13,15 +12,11 @@ const donors = require('./routes/api/donor');
 const admin = require('./routes/api/admin/users');
 const adminView = require('./routes/api/admin/adminView');
 const forms = require('./routes/api/formDetails/qa');
+const enqforms = require('./routes/api/formDetails/enquiryForm');
 const doctor = require('./routes/api/doctor/doctor');
 const doctorprofile = require('./routes/api/doctor/docProfile');
 const doctorappoint = require('./routes/api/appointment/doctorSearch');
-
 const doctorFunction = require('./routes/api/doctor/docFunction');
-
-// Sendgrid api
-// username apikey
-// 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
 
 const app = express();
 
@@ -38,7 +33,6 @@ app.use(function(req,res,next){
 
 app.use(morgan('dev'));
 
-
 // DB Config
 const db = require('./config/keys').mongoURI;
 
@@ -54,30 +48,27 @@ require('./config/passport')(passport);
 // Admin Passport Config
 require('./config/adminPassport')(adpassport);
 
-
 // User Routes
 app.use('/api/users',users);
 app.use('/api/mobile',mobotp);
 app.use('/api/profile',profiles);
 app.use('/api/patient',patients);
 app.use('/api/donor',donors);
+
 // Adminpanel Side
 app.use('/api/admin',admin);
 app.use('/api/admin/view',adminView);
+
 // Form Questions Api
 app.use('/api/forms',forms);
+app.use('/api/enqforms',enqforms);
+
 // Doctor API
 app.use('/api/doctor',doctor);
 app.use('/api/doctor/details',doctorprofile);
 app.use('/api/doctor/function',doctorFunction);
 
-
 // This is user's side
 app.use('/api/doctor/appointment',doctorappoint);
-
-
-
-
-
 const port = process.env.PORT || 5000;
 app.listen(port,()=>console.log(`server running on port ${port}`));

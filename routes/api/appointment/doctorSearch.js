@@ -100,36 +100,10 @@ router.post('/payment-trigger',userloginrequire,async (req,res)=>{
                       obj
                     });
                   })
-    // res.status(200).json({
-    //   response
-    // });
+   
   } catch (error) {
     console.log(error);
   }
-
-
-  // razorpayInstance.orders.create(params)
-  //           .then((res)=>{
-  //             const paymentDetail = new PaymentDetail({
-  //               user : req.user.id,
-  //               orderId: res.id,
-  //               receiptId: res.receipt,
-  //               amount: res.amount,
-  //               currency: res.currency,
-  //               createdAt: res.created_at,
-  //               status: res.status
-  //             });
-  //             paymentDetail.save().then(
-  //               (obj)=>{
-
-  //                 // break;
-  //                 // console.log(obj);
-  //                 // return obj;
-                  
-  //               }
-  //             );
-   
-  //           });
 
 });
 
@@ -159,20 +133,12 @@ router.post('/verify',userloginrequire,async function(req,res){
 				if(err){
 					throw err;
 				}
-				// Render payment success page, if saved succeffully
-				// res.render('pages/payment/success', {
-				// 	title: "Payment verification successful",
-				// 	paymentDetail: doc
-				// })
         res.status(200).json({'msg':"Payment Verification Successful"});
 			}
 		);
 	} else {
     res.status(400).json({'msg':"Payment Verification Failed"});
 
-		// res.render('pages/payment/fail', {
-		// 	title: "Payment verification failed",
-		// })
 	}
 });
 

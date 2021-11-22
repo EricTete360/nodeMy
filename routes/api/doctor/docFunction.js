@@ -90,7 +90,7 @@ router.get('/paientintake',docauth,(req,res)=>{
                          }
                      })
                      .catch(error => { res.status(400).json(error) })
-})
+});
 
 // Method:POST
 router.post('/setPatientIntake',docauth,(req,res)=>{
@@ -104,5 +104,22 @@ router.post('/setPatientIntake',docauth,(req,res)=>{
              .catch(err => { res.status(400).json(err) }) 
 });
 
+
+// Doctors Booking List And Setting it's checkmark 
+router.get('/bookinglist',docauth,(req,res)=>{
+    
+    Booking.findOne({doc_id:req.user.id})
+            
+           .then(list => { 
+            console.log(req.user.id)
+            if(!list){
+              return res.status(404).json({ msg:"No Booking Found" });
+  
+             }
+             res.json(list);
+            })
+           .catch(err => { res.status(401).json(err); });
+  });
+  
 
 module.exports = router;

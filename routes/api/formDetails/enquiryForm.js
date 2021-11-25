@@ -13,16 +13,16 @@ const EnquiryFormdet = require('../../../models/formDetails/EnquiryForm');
 
 // for frontend users
 // GET REQUEST OF Questions
-router.get('/enquiryformview',userloginrequire, (req, res) => {
+router.get('/enquiryformview', (req, res) => {
     EnquiryFormdet.find()
       .then(enq => res.json(enq))
       .catch(err => res.status(404).json({ noformsfound: 'No enquiry found' }));
   });
 
 
-router.post('/enqaddform',userloginrequire,(req,res)=>{
+router.post('/enqaddform',(req,res)=>{
     const addinfo = new EnquiryFormdet({
-        user:req.user.id,
+        // user:req.user.id,
         firstname:req.body.firstname,
         lastname:req.body.lastname,
         email:req.body.email,

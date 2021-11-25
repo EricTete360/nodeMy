@@ -30,6 +30,7 @@ const { user } = require('../../../config/keys');
 const AnswersOFaddinfo = require('../../../models/formDetails/AnswersOFaddinfo');
 const AnswersOFPatientdet = require('../../../models/formDetails/AnswersOFPatientdet');
 const AnswersOFDonordet = require('../../../models/formDetails/AnswersOFDonordet');
+const Enquirydet = require('../../../models/formDetails/EnquiryForm');
 
 // const { use } = require('passport');
 
@@ -46,6 +47,13 @@ const transporter = nodemailer.createTransport({
 router.get('/userDetails', (req, res) => {
     User.find()
       .then(user => res.json(user))
+      .catch(err => res.status(404).json({ nouserfound: 'No user found' }));
+});
+
+// 
+router.get('/enquiryDetails', (req, res) => {
+    Enquirydet.find()
+      .then(enq => res.json(enq))
       .catch(err => res.status(404).json({ nouserfound: 'No user found' }));
 });
 

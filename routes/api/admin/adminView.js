@@ -50,13 +50,24 @@ router.get('/userDetails', (req, res) => {
       .catch(err => res.status(404).json({ nouserfound: 'No user found' }));
 });
 
-// 
+// Form Enquiry
 router.get('/enquiryDetails', (req, res) => {
     Enquirydet.find()
       .then(enq => res.json(enq))
       .catch(err => res.status(404).json({ nouserfound: 'No user found' }));
 });
-
+// Form Filter
+router.get('/enquiry/:search', (req, res) => {
+    var regex = new RegExp(req.params.search,'i'); 
+    Enquirydet.find({service:regex}).then((result)=>{
+        res.status(200).json(result)
+    });
+    // const searchField = req.query.search;
+    // Enquirydet.find({service:{$regex:searchField,$options:'$1'}})
+    //   .then(enq =>
+    //      res.json(enq)
+    //      ).catch(err => res.status(404).json({ nouserfound: 'No Service found' }));
+});
 
 // Info with Question and answers
 router.get('/userInfo/:id', (req, res) => {

@@ -3,22 +3,17 @@ const Schema = mongoose.Schema;
 
 
 const EnquiryDocs = new mongoose.Schema({
-    user: {
-        //   Db relationship as in foreignkey
-        type: Schema.Types.ObjectId,
-        ref: 'users',
-        
-    },
-    firstname:{
-        type:String,
-        required:true
-    },
-    lastname:{
+   
+    fullname:{
         type:String,
         required:true
     },
     email:{
         type:String,
+    },
+    city:{
+        type:String,
+        required:true
     },
     mobile:{
         type:String,

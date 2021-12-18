@@ -22,9 +22,8 @@ router.get('/enquiryformview', (req, res) => {
 
 router.post('/enqaddform',(req,res)=>{
     const addinfo = new EnquiryFormdet({
-        // user:req.user.id,
-        firstname:req.body.firstname,
-        lastname:req.body.lastname,
+        fullname:req.body.fullname,
+        city:req.body.city,
         email:req.body.email,
         mobile:req.body.mobile,
         service:req.body.service,
